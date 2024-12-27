@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>סימולציית WhatsApp 2025 - Tracer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #22c55e;
+            --whatsapp-color: #25D366;
+            --whatsapp-dark: #128C7E;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+        }
+
+        .phone-container {
+            max-width: 360px;
+            height: 700px;
+            background: white;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            backdrop-filter: blur(10px);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 25px;
+            background: #000;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            z-index: 10;
+        }
+
+        .whatsapp-header {
+            background: var(--whatsapp-dark);
+            color: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .driver-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .chat-container {
+            height: calc(100% - 120px);
+            background: #E5DDD5;
+            padding: 16px;
+            overflow-y: auto;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2z' fill='%239C92AC' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .message.received {
+            background: rgba(255, 255, 255, 0.95);
+            margin-right: auto;
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+            border-bottom-left-radius: 4px;
+            border-top-left-radius: 12px;
+        }
+
+        .message.sent {
+            background: rgba(220, 248, 198, 0.95);
+            margin-left: auto;
+        }
+
+        .order-info {
+            border-right: 4px solid var(--whatsapp-color);
+            padding-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .order-info div {
+            margin: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .action-button {
+            background: linear-gradient(135deg, var(--whatsapp-dark), var(--whatsapp-color));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .action-button i {
+            font-size: 16px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: rgba(0,0,0,0.5);
+            margin-top: 4px;
+            justify-content: flex-end;
+        }
+
+        .status-indicator.delivered i {
+            color: var(--whatsapp-color);
+        }
+
+        @media (min-width: 1024px) {
+            .phones-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 32px;
+                padding: 32px;
+                align-items: start;
+            }
+        }
+
+        @media (max-width: 1023px) {
+            .phones-grid {
+                display: flex;
+                flex-direction: column;
+                gap: 40px;
+                padding: 20px;
+                align-items: center;
+            }
+
+            .phone-container {
+                max-width: 100%;
+                width: 340px;
+            }
+        }
+
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm p-4 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <img src="https://tracer.co.il/wp-content/uploads/elementor/thumbs/Logo-H-p8d906f0bmrgobnn9uwquzibery89mtbvr1plpc910.png" 
+                 alt="Tracer Logo" 
+                 class="h-12">
+            <div class="text-right">
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">
+                    מערכת חלוקת משימות חכמה
+                </h1>
+                <p class="text-gray-500">AI מחלק משימות בצורה אופטימלית</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto py-8">
+        <div class="phones-grid">
+            <!-- Phone 1 -->
+            <div class="phone-container">
+                <div class="phone-notch"></div>
+                <div class="whatsapp-header">
+                    <div class="driver-avatar">
+                        <i class="fas fa-motorcycle"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold">אחמד - אופנוע</h2>
+                        <div class="text-sm opacity-75">מקוון - זמין למשימות</div>
+                    </div>
+                </div>
+                <div class="chat-container" id="chat1"></div>
+            </div>
+
+            <!-- Phone 2 -->
+            <div class="phone-container">
+                <div class="phone-notch"></div>
+                <div class="whatsapp-header">
+                    <div class="driver-avatar">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold">משה - רכב מסחרי</h2>
+                        <div class="text-sm opacity-75">מקוון - זמין למשימות</div>
+                    </div>
+                </div>
+                <div class="chat-container" id="chat2"></div>
+            </div>
+
+            <!-- Phone 3 -->
+            <div class="phone-container">
+                <div class="phone-notch"></div>
+                <div class="whatsapp-header">
+                    <div class="driver-avatar">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold">יוסי - רכב פרטי</h2>
+                        <div class="text-sm opacity-75">מקוון - זמין למשימות</div>
+                    </div>
+                </div>
+                <div class="chat-container" id="chat3"></div>
+            </div>
+        </div>
+    </main>
+
+    <div class="optimization-counter">
+        <div class="counter-text">
+            <span class="number" id="pointsCounter">40</span>
+            <span>נקודות נשארו לחלוקה</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <style>
+        .optimization-counter {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            z-index: 100;
+            width: 90%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .counter-text {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .counter-text .number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-right: 8px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            width: 100%;
+            transition: width 0.3s ease;
+        }
+    </style>
+
+    <script>
+
+const orders = [
+    // שליח 1 - אופנוע
+    {
+        client: "משה כהן",
+        address: "דיזנגוף 100, תל אביב",
+        time: "10:30",
+        task: "איסוף מסמכים",
+        vehicle: "אופנוע",
+        urgency: "דחוף"
+    },
+    {
+        client: "דנה לוי",
+        address: "אלנבי 50, תל אביב",
+        time: "11:00",
+        task: "משלוח קטן",
+        vehicle: "אופנוע",
+        urgency: "רגיל"
+    },
+    {
+        client: "יעל כהן",
+        address: "בן יהודה 80, תל אביב",
+        time: "11:30",
+        task: "משלוח דחוף",
+        vehicle: "אופנוע",
+        urgency: "דחוף"
+    },
+    {
+        client: "אבי לוי",
+        address: "פרישמן 40, תל אביב",
+        time: "12:00",
+        task: "איסוף מסמכים",
+        vehicle: "אופנוע",
+        urgency: "רגיל"
+    },
+    {
+        client: "מיכל דוד",
+        address: "ארלוזורוב 150, תל אביב",
+        time: "12:30",
+        task: "משלוח קטן",
+        vehicle: "אופנוע",
+        urgency: "רגיל"
+    },
+    {
+        client: "רונית כהן",
+        address: "אלנבי 90, תל אביב",
+        time: "13:00",
+        task: "איסוף חבילה",
+        vehicle: "אופנוע",
+        urgency: "דחוף"
+    },
+    {
+        client: "אלי שמעון",
+        address: "ויצמן 20, תל אביב",
+        time: "13:30",
+        task: "משלוח קטן",
+        vehicle: "אופנוע",
+        urgency: "רגיל"
+    },
+    {
+        client: "אפרת לוי",
+        address: "קרליבך 30, תל אביב",
+        time: "14:00",
+        task: "משלוח מסמכים",
+        vehicle: "אופנוע",
+        urgency: "רגיל"
+    },
+    {
+        client: "יוסי גד",
+        address: "הרצל 50, תל אביב",
+        time: "14:30",
+        task: "משלוח תרופות",
+        vehicle: "אופנוע",
+        urgency: "דחוף"
+    },
+    {
+        client: "ניצן אלון",
+        address: "חיים לבנון 15, תל אביב",
+        time: "15:00",
+        task: "משלוח קטן",
+        vehicle: "אופנוע",
+        urgency: "רגיל"
+    },
+    {
+        client: "מרים גולד",
+        address: "רוטשילד 60, תל אביב",
+        time: "15:30",
+        task: "איסוף מסמכים",
+        vehicle: "אופנוע",
+        urgency: "דחוף"
+    },
+    {
+        client: "חיים אלון",
+        address: "אבן גבירול 200, תל אביב",
+        time: "16:00",
+        task: "משלוח חבילה",
+        vehicle: "אופנוע",
+        urgency: "רגיל"
+    },
+    {
+        client: "רותי כהן",
+        address: "רבין 100, תל אביב",
+        time: "16:30",
+        task: "משלוח מסמכים",
+        vehicle: "אופנוע",
+        urgency: "דחוף"
+    },
+
+    // שליח 2 - רכב מסחרי
+    {
+        client: "חברת ABC",
+        address: "רוטשילד 45, תל אביב",
+        time: "09:30",
+        task: "הובלת ציוד",
+        vehicle: "רכב מסחרי",
+        urgency: "דחוף"
+    },
+    {
+        client: "מחסני XYZ",
+        address: "המסגר 20, תל אביב",
+        time: "10:15",
+        task: "איסוף סחורה",
+        vehicle: "רכב מסחרי",
+        urgency: "רגיל"
+    },
+    {
+        client: "סופר שיווק",
+        address: "הברזל 10, תל אביב",
+        time: "11:00",
+        task: "הובלת סחורה",
+        vehicle: "רכב מסחרי",
+        urgency: "דחוף"
+    },
+    {
+        client: "חנות ריהוט",
+        address: "בני ברק 10, תל אביב",
+        time: "11:20",
+        task: "משלוח רהיטים",
+        vehicle: "רכב מסחרי",
+        urgency: "רגיל"
+    }, 
+    {
+        client: "חנות ריהוט",
+        address: "בני ברק 15, תל אביב",
+        time: "11:45",
+        task: "משלוח רהיטים",
+        vehicle: "רכב מסחרי",
+        urgency: "רגיל"
+    },
+    {
+        client: "מפעל תעשייה",
+        address: "התעשייה 30, חולון",
+        time: "12:30",
+        task: "הובלת חומרים",
+        vehicle: "רכב מסחרי",
+        urgency: "דחוף"
+    },
+    {
+        client: "חנות צעצועים",
+        address: "דיזנגוף 200, תל אביב",
+        time: "13:00",
+        task: "משלוח צעצועים",
+        vehicle: "רכב מסחרי",
+        urgency: "רגיל"
+    },
+    {
+        client: "מרפאת משפחה",
+        address: "בן צבי 10, בת ים",
+        time: "14:15",
+        task: "משלוח תרופות",
+        vehicle: "רכב מסחרי",
+        urgency: "דחוף"
+    },
+    {
+        client: "משרד רואי חשבון",
+        address: "רוטשילד 80, תל אביב",
+        time: "14:45",
+        task: "איסוף מסמכים",
+        vehicle: "רכב מסחרי",
+        urgency: "רגיל"
+    },
+    {
+        client: "חנות ספרים",
+        address: "הירקון 30, תל אביב",
+        time: "15:15",
+        task: "משלוח ספרים",
+        vehicle: "רכב מסחרי",
+        urgency: "דחוף"
+    },
+    {
+        client: "חנות רהיטים",
+        address: "רוטשילד 100, ראשון לציון",
+        time: "16:30",
+        task: "משלוח רהיטים",
+        vehicle: "רכב מסחרי",
+        urgency: "דחוף"
+    },
+    {
+        client: "קיוסק מרכזי",
+        address: "השלום 12, תל אביב",
+        time: "17:00",
+        task: "משלוח מוצרים",
+        vehicle: "רכב מסחרי",
+        urgency: "רגיל"
+    },
+    {
+        client: "חברת לוגיסטיקה",
+        address: "אלנבי 150, תל אביב",
+        time: "17:30",
+        task: "משלוח חבילות",
+        vehicle: "רכב מסחרי",
+        urgency: "רגיל"
+    },
+    {
+        client: "מרכז ספורט",
+        address: "רבין 30, תל אביב",
+        time: "18:00",
+        task: "משלוח ציוד ספורט",
+        vehicle: "רכב מסחרי",
+        urgency: "דחוף"
+    },
+
+    // שליח 3 - רכב פרטי
+    {
+        client: "רונית שמש",
+        address: "הברזל 30, תל אביב",
+        time: "11:30",
+        task: "משלוח בינוני",
+        vehicle: "רכב פרטי",
+        urgency: "רגיל"
+    },
+    {
+        client: "משרד עו\"ד",
+        address: "מנחם בגין 100, תל אביב",
+        time: "12:00",
+        task: "איסוף מסמכים",
+        vehicle: "רכב פרטי",
+        urgency: "דחוף"
+    },
+    {
+        client: "מרפאת שיניים",
+        address: "ז׳בוטינסקי 80, רמת גן",
+        time: "12:30",
+        task: "משלוח ציוד רפואי",
+        vehicle: "רכב פרטי",
+        urgency: "רגיל"
+    },
+    {
+        client: "סוכנות ביטוח",
+        address: "אבא הלל 20, רמת גן",
+        time: "13:00",
+        task: "העברת מסמכים",
+        vehicle: "רכב פרטי",
+        urgency: "רגיל"
+    },
+    {
+        client: "בית מרקחת",
+        address: "הרצל 100, גבעתיים",
+        time: "13:30",
+        task: "משלוח תרופות",
+        vehicle: "רכב פרטי",
+        urgency: "דחוף"
+    },
+    {
+        client: "מכון כושר",
+        address: "הרצל 300, חולון",
+        time: "14:15",
+        task: "משלוח ציוד כושר",
+        vehicle: "רכב פרטי",
+        urgency: "רגיל"
+    },
+    {
+        client: "חנות בגדים",
+        address: "הגפן 7, רחובות",
+        time: "15:00",
+        task: "משלוח בגדים",
+        vehicle: "רכב פרטי",
+        urgency: "רגיל"
+    },
+    {
+        client: "בית חולים איכילוב",
+        address: "ויצמן 6, תל אביב",
+        time: "15:30",
+        task: "משלוח מסמכים רפואיים",
+        vehicle: "רכב פרטי",
+        urgency: "דחוף"
+    },
+    {
+        client: "פלאפל המלך",
+        address: "כיכר דיזנגוף 1, תל אביב",
+        time: "16:00",
+        task: "משלוח אוכל",
+        vehicle: "רכב פרטי",
+        urgency: "רגיל"
+    },
+    {
+        client: "בית קפה בוקר טוב",
+        address: "שדרות חן 45, תל אביב",
+        time: "16:30",
+        task: "משלוח קפה",
+        vehicle: "רכב פרטי",
+        urgency: "רגיל"
+    },
+    {
+        client: "חנות פרחים",
+        address: "רבין 90, תל אביב",
+        time: "17:00",
+        task: "משלוח פרחים",
+        vehicle: "רכב פרטי",
+        urgency: "רגיל"
+    },
+    
+    {
+        client: "מסעדת מזרחי",
+        address: "אילת 5, ירושלים",
+        time: "17:30",
+        task: "משלוח ציוד מטבח",
+        vehicle: "רכב פרטי",
+        urgency: "דחוף"
+    },
+    {
+        client: "חנות כלי נגינה",
+        address: "רוטשילד 300, תל אביב",
+        time: "18:00",
+        task: "משלוח כלי נגינה",
+        vehicle: "רכב פרטי",
+        urgency: "רגיל"
+    }
+];
+
+        function getVehicleIcon(vehicle) {
+            switch(vehicle.toLowerCase()) {
+                case 'אופנוע': return 'fa-motorcycle';
+                case 'רכב מסחרי': return 'fa-truck';
+                case 'רכב פרטי': return 'fa-car';
+                default: return 'fa-shipping-fast';
+            }
+        }
+
+        function getUrgencyClass(urgency) {
+            return urgency === 'דחוף' ? 'text-red-500 font-bold' : 'text-gray-700';
+        }
+
+        function createMessage(order) {
+            const vehicleIcon = getVehicleIcon(order.vehicle);
+            const urgencyClass = getUrgencyClass(order.urgency);
+            
+            return `
+                <div class="order-info">
+                    <div class="font-bold">
+                        <i class="fas fa-user-circle text-blue-500"></i>
+                        ${order.client}
+                    </div>
+                    <div>
+                        <i class="fas fa-map-marker-alt text-red-500"></i>
+                        ${order.address}
+                    </div>
+                    <div>
+                        <i class="fas fa-clock text-green-500"></i>
+                        ${order.time}
+                    </div>
+                    <div class="${urgencyClass}">
+                        <i class="fas ${vehicleIcon}"></i>
+                        ${order.task}
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <div class="action-button">
+                        <i class="fas fa-phone"></i>
+                        התקשר ללקוח
+                    </div>
+                    <div class="action-button">
+                        <i class="fas fa-map-marked-alt"></i>
+                        נווט ב-Waze
+                    </div>
+                </div>
+                <div class="status-indicator delivered">
+                    <span>נשלח</span>
+                    <i class="fas fa-check-double"></i>
+                </div>
+            `;
+        }
+
+        function addMessageToChat(chatId, message, delay = 0) {
+            setTimeout(() => {
+                const chatContainer = document.getElementById(chatId);
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message received';
+                messageDiv.innerHTML = message;
+                chatContainer.appendChild(messageDiv);
+
+                gsap.to(messageDiv, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.5,
+                    ease: "back.out(1.7)"
+                });
+
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, delay);
+        }
+
+        function updateCounter(remainingPoints) {
+            const counter = document.getElementById('pointsCounter');
+            const progressFill = document.getElementById('progressFill');
+            counter.textContent = remainingPoints;
+            const progress = ((40 - remainingPoints) / 40) * 100;
+            progressFill.style.width = `${100 - progress}%`;
+        }
+
+        function showOptimizationMessage(chatId) {
+            const message = `
+                <div class="order-info">
+                    <div class="font-bold text-blue-600">
+                        <i class="fas fa-robot"></i>
+                        מערכת טרייסר
+                    </div>
+                    <div class="mt-2">
+                        המסלול עבר אופטימיזציה חכמה בהתחשב ב:
+                        • עומסי תנועה בזמן אמת 🚦
+                        • מרחקים בין נקודות 📍
+                        • חלונות זמן ללקוחות ⏰
+                        • סוג הרכב והמשימות 🚗
+                    </div>
+                </div>
+            `;
+            addMessageToChat(chatId, message, 0);
+        }
+
+        let totalPointsDistributed = 0;
+
+        function distributeOrders() {
+    // מחלק את ההזמנות לשליחים
+    const motorcycleOrders = orders.filter(order => order.vehicle === 'אופנוע');
+    const truckOrders = orders.filter(order => order.vehicle === 'רכב מסחרי');
+    const carOrders = orders.filter(order => order.vehicle === 'רכב פרטי');
+    
+    let totalSent = 0;
+    const baseDelay = 500; // דיליי מהיר יותר בין הודעות
+
+    function sendOrderToChat(order, chatId, index) {
+        setTimeout(() => {
+            addMessageToChat(chatId, createMessage(order));
+            totalSent++;
+            updateCounter(40 - totalSent);
+
+            // אם זו ההודעה האחרונה
+            if (totalSent >= orders.length) {
+                setTimeout(() => {
+                    ['chat1', 'chat2', 'chat3'].forEach(chat => {
+                        showOptimizationMessage(chat);
+                    });
+                    // מעבר לדף הבא
+                    setTimeout(() => {
+                        window.location.href = 'next-page.html';
+                    }, 3000);
+                }, 1000);
+            }
+        }, index * baseDelay);
+    }
+
+    // שולח במקביל לכל השליחים
+    motorcycleOrders.forEach((order, index) => sendOrderToChat(order, 'chat1', index));
+    truckOrders.forEach((order, index) => sendOrderToChat(order, 'chat2', index));
+    carOrders.forEach((order, index) => sendOrderToChat(order, 'chat3', index));
+}
+        
+
+        // Start distribution when page loads with initial animation
+        window.addEventListener('load', () => {
+            // Animate phones in
+            const phones = document.querySelectorAll('.phone-container');
+            phones.forEach((phone, index) => {
+                gsap.from(phone, {
+                    opacity: 0,
+                    y: 50,
+                    rotateY: 45,
+                    duration: 0.8,
+                    delay: index * 0.2,
+                    ease: "back.out(1.7)"
+                });
+            });
+            
+            // Start distributing orders after phones animation
+            setTimeout(distributeOrders, 1000);
+        });
+    </script>
+</body>
+</html>
