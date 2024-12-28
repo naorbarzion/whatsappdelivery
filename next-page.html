@@ -2,66 +2,66 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>שאלות נפוצות - Tracer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        /* Reset & Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Rubik', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
+        body {
+            background: #f8fafc;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Hero Section */
         .hero-section {
             position: relative;
             width: 100%;
-            height: 70vh;
-            background-color: #000;
+            height: 60vh;
+            min-height: 400px;
+            background: #000;
             overflow: hidden;
-        }
-
-        @media (max-width: 768px) {
-            .hero-section {
-                height: 50vh;
-            }
         }
 
         .hero-background {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
         }
 
         .youtube-container {
             position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
+            width: 100%;
+            height: 100%;
             overflow: hidden;
-            max-width: 100%;
         }
 
         .youtube-container iframe {
             position: absolute;
-            top: -50%;
-            left: 0;
-            width: 100%;
-            height: 200%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200vw;
+            height: 200vh;
             pointer-events: none;
         }
 
         .overlay {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7));
+            inset: 0;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8));
             z-index: 1;
         }
 
@@ -81,283 +81,198 @@
 
         .logo {
             position: absolute;
-            top: 2rem;
-            right: 2rem;
+            top: 1rem;
+            right: 1rem;
+            height: 35px;
             width: auto;
-            height: 50px;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
         }
 
         .title {
-            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-size: clamp(2rem, 8vw, 3rem);
             font-weight: 700;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .subtitle {
-            font-size: clamp(1rem, 3vw, 1.5rem);
+            font-size: clamp(1rem, 4vw, 1.25rem);
             opacity: 0.9;
+            padding: 0 1rem;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
+
+        /* FAQ Section */
         .faq-section {
-    padding: 4rem 2rem;
+    padding: 1.5rem;
     background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    min-height: 100vh; /* הוספת גובה מינימלי */
+    padding-bottom: 100px; /* הוספת padding בתחתית */
 }
 
-.faq-container {
-    max-width: 1200px;
+        .faq-container {
+    max-width: 600px;
     margin: 0 auto;
-    display: grid;
-    gap: 1.5rem;
-}
-
-.faq-card {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    border-radius: 24px;
-    padding: 1.75rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.faq-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.06);
-    border-color: rgba(255, 255, 255, 0.8);
-}
-
-.faq-header {
     display: flex;
-    gap: 1.5rem;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative; /* הוספת position relative */
+    width: 100%;
 }
 
-.faq-icon-wrapper {
-    position: relative;
-    margin-top: 4px;
-}
-
-.faq-icon {
-    width: 48px;
-    height: 48px;
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        .faq-card {
+    background: #fff;
     border-radius: 16px;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+        .faq-header {
+    padding: 1rem;
+    display: flex;
+    gap: 1rem;
+}
+
+        .faq-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 1.25rem;
-    position: relative;
-    z-index: 1;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
 }
 
-.faq-icon::after {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    background: linear-gradient(135deg, #60a5fa, #a78bfa);
-    border-radius: inherit;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.3s;
-}
+        .faq-content {
+            flex: 1;
+        }
 
-.faq-card:hover .faq-icon::after {
-    opacity: 1;
-}
-
-.faq-section {
-    padding: 4rem 2rem;
-    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-}
-
-.faq-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    gap: 1.5rem;
-}
-
-.faq-card {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    border-radius: 24px;
-    padding: 1.75rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.faq-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.06);
-    border-color: rgba(255, 255, 255, 0.8);
-}
-
-.faq-header {
-    display: flex;
-    gap: 1.5rem;
-}
-
-.faq-icon-wrapper {
-    position: relative;
-    margin-top: 4px;
-}
-
-.faq-icon {
-    width: 48px;
-    height: 48px;
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1.25rem;
-    position: relative;
-    z-index: 1;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
-}
-
-.faq-content {
-    flex: 1;
-}
-
-.faq-question {
-    font-size: 1.25rem;
+        .faq-question {
+    font-size: 1.1rem;
     font-weight: 600;
-    color: #0f172a;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1rem;
 }
 
-.faq-toggle {
-    min-width: 32px;
-    height: 32px;
-    background: #f1f5f9;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #64748b;
-    transition: all 0.3s ease;
-}
+        .faq-toggle {
+            background: #f1f5f9;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
 
-.faq-question.active .faq-toggle {
-    background: #3b82f6;
-    color: white;
-    transform: rotate(180deg);
-}
+        .faq-question.active .faq-toggle {
+            background: #3b82f6;
+            color: white;
+            transform: rotate(180deg);
+        }
 
-.faq-answer {
+        .faq-answer {
     height: 0;
     overflow: hidden;
-    transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: height 0.3s ease;
 }
 
 .faq-answer-content {
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 16px;
+    padding: 0 1rem 1rem;
+}
+
+        /* Features List */
+        .feature-list {
+    display: grid;
+    gap: 0.75rem;
     margin-top: 1rem;
-    color: #4b5563;
-    line-height: 1.6;
 }
 
-.feature-list {
-    display: grid;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
 
-.feature-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.9);
+        .feature-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            font-size: 0.95rem;
+            color: #1f2937;
+            line-height: 1.4;
+        }
+
+        /* Images */
+        .faq-images {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .faq-image {
+    width: 35%;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-top: 1rem;
 }
 
-.feature-icon {
-    width: 32px;
-    height: 32px;
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1rem;
-    flex-shrink: 0;
-}
+        /* Link */
+        .presentation-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding: 0.75rem 1.25rem;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            width: 100%;
+            justify-content: center;
+        }
 
-.feature-text {
-    font-size: 1.1rem;
-    color: #1f2937;
-    line-height: 1.5;
-}
+        /* Active States & Animations */
+        .faq-card:active {
+            transform: scale(0.98);
+        }
 
-.faq-images {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    margin-top: 2rem;
-}
+        /* Loading Animation */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
 
-.faq-image {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    border-radius: 16px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-}
-
-.presentation-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 1.5rem;
-    padding: 0.75rem 1.5rem;
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-    color: white;
-    border-radius: 12px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: transform 0.3s ease;
-}
-
-.presentation-link:hover {
-    transform: translateY(-2px);
-}
-
-@media (max-width: 768px) {
-    .faq-images {
-        grid-template-columns: 1fr;
-    }
-    
-    .faq-card {
-        padding: 1.25rem;
-    }
-    
-    .feature-list {
-        gap: 0.75rem;
-    }
-}
+        .loading {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
     </style>
 </head>
 <body>
+    <!-- Hero Section -->
     <section class="hero-section">
         <div class="hero-background">
             <div class="youtube-container">
@@ -365,8 +280,8 @@
                     src="https://www.youtube.com/embed/Iaiu9ChqN9A?autoplay=1&mute=1&controls=0&loop=1&playlist=Iaiu9ChqN9A&showinfo=0&rel=0&modestbranding=1&playsinline=1"
                     frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                ></iframe>
+                    allowfullscreen>
+                </iframe>
             </div>
         </div>
         <div class="overlay"></div>
@@ -378,266 +293,328 @@
             <p class="subtitle">כל מה שאתם צריכים לדעת על המערכת שלנו</p>
         </div>
     </section>
+
+    <!-- FAQ Section -->
     <section class="faq-section">
-        <div class="faq-container">
-<!-- FAQ 1 - מיקום -->
-<div class="faq-card">
-    <div class="faq-header">
-        <div class="faq-icon-wrapper">
-            <div class="faq-icon">
-                <i class="fas fa-location-dot"></i>
-            </div>
-        </div>
-        <div class="faq-content">
-            <h3 class="faq-question" onclick="toggleAnswer(this)">
-                <span>האם אפשר לדעת את מיקום השליחים והטכנאים בזמן אמת?</span>
-                <div class="faq-toggle">
-                    <i class="fas fa-chevron-down"></i>
+        <div class="faq-card">
+            <!-- FAQ 1 - מיקום -->
+            <div class="faq-header">
+                <div class="faq-icon">
+                    <i class="fas fa-location-dot"></i>
                 </div>
-            </h3>
-            <div class="faq-answer">
-                <div class="faq-answer-content">
-                    <div class="feature-list">
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <i class="fas fa-shield-alt"></i>
-                            </div>
-                            <div class="feature-text">
-                                עמידה בתקני אבטחת מידע ISO/IEC 27001 ו-ISO 27009
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
-                            <div class="feature-text">
-                                דו״חות מתקדמים המספקים תובנות עסקיות ואופרטיביות בזמן אמת
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <i class="fas fa-map-marked-alt"></i>
-                            </div>
-                            <div class="feature-text">
-                                ניהול התראות, גדרות גיאוגרפיות ואופטימיזציית מסלולים
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <i class="fas fa-users-cog"></i>
-                            </div>
-                            <div class="feature-text">
-                                ניהול היררכי של משתמשים ונהגים עם הרשאות מותאמות
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <i class="fas fa-sync"></i>
-                            </div>
-                            <div class="feature-text">
-                                קצב רענון מהיר של 2 שניות* (*בהתאם למכשור)
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <i class="fas fa-tachometer-alt"></i>
-                            </div>
-                            <div class="feature-text">
-                                דשבורדים אנליטיים מתקדמים לקבלת החלטות מבוססות נתונים
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <i class="fas fa-truck"></i>
-                            </div>
-                            <div class="feature-text">
-                                כלים מתקדמים לניהול ציי רכב ונכסים בכל סדר גודל
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <i class="fas fa-broadcast-tower"></i>
-                            </div>
-                            <div class="feature-text">
-                                מעקב בזמן אמת אחר כל הרכבים במערכת
-                            </div>
+                <div class="faq-content">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>האם אפשר לדעת את מיקום השליחים והטכנאים בזמן אמת?</span>
+                        <div class="faq-toggle">
+                            <i class="fas fa-chevron-down"></i>
                         </div>
                     </div>
-                    <img src="https://tracer.co.il/wp-content/uploads/2022/12/Desktop-1-768x576.jpg" 
-                         alt="ממשק המערכת" 
-                         class="faq-image main-image">
-                </div>
-            </div>
-        </div>
-    </div>
- </div>
-    
-            <!-- FAQ 2 - התראות הגעה -->
-            <div class="faq-card">
-                <div class="faq-header">
-                    <div class="faq-icon-wrapper">
-                        <div class="faq-icon">
-                            <i class="fas fa-bell"></i>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <div class="feature-list">
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <div class="feature-text">
+                                        עמידה בתקני אבטחת מידע ISO/IEC 27001 ו-ISO 27009
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                    <div class="feature-text">
+                                        דו״חות מתקדמים המספקים תובנות עסקיות ואופרטיביות בזמן אמת
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-map-marked-alt"></i>
+                                    </div>
+                                    <div class="feature-text">
+                                        ניהול התראות, גדרות גיאוגרפיות ואופטימיזציית מסלולים
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-users-cog"></i>
+                                    </div>
+                                    <div class="feature-text">
+                                        ניהול היררכי של משתמשים ונהגים עם הרשאות מותאמות
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-sync"></i>
+                                    </div>
+                                    <div class="feature-text">
+                                        קצב רענון מהיר של 2 שניות* (*בהתאם למכשור)
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-tachometer-alt"></i>
+                                    </div>
+                                    <div class="feature-text">
+                                        דשבורדים אנליטיים מתקדמים לקבלת החלטות מבוססות נתונים
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-truck"></i>
+                                    </div>
+                                    <div class="feature-text">
+                                        כלים מתקדמים לניהול ציי רכב ונכסים בכל סדר גודל
+                                    </div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-broadcast-tower"></i>
+                                    </div>
+                                    <div class="feature-text">
+                                        מעקב בזמן אמת אחר כל הרכבים במערכת
+                                    </div>
+                                </div>
+                            </div>
+                            <img src="https://tracer.co.il/wp-content/uploads/2022/12/Desktop-1-768x576.jpg" 
+                                 alt="ממשק המערכת" 
+                                 class="faq-image main-image">
                         </div>
                     </div>
-                    <div class="faq-content">
-                        <h3 class="faq-question" onclick="toggleAnswer(this)">
-                            <span>האם ניתן לקבל התראת WhatsApp בהגעת השליח?</span>
-                            <div class="faq-toggle">
-                                <i class="fas fa-chevron-down"></i>
-                            </div>
-                        </h3>
-                        <div class="faq-answer">
-                            <div class="faq-answer-content">
-                                <p>כן! המערכת שולחת התראות אוטומטיות ב-WhatsApp המעדכנות בזמן אמת על הגעת השליח ליעד.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    
-            <!-- FAQ 3 - עדכון לקוחות -->
-            <div class="faq-card">
-                <div class="faq-header">
-                    <div class="faq-icon-wrapper">
-                        <div class="faq-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                    </div>
-                    <div class="faq-content">
-                        <h3 class="faq-question" onclick="toggleAnswer(this)">
-                            <span>כיצד מתבצע עדכון הלקוחות על זמני ההגעה?</span>
-                            <div class="faq-toggle">
-                                <i class="fas fa-chevron-down"></i>
-                            </div>
-                        </h3>
-                        <div class="faq-answer">
-                            <div class="faq-answer-content">
-                                <p>המערכת מעבירה הודעות מותאמות אישית ללקוחות, הכוללות את פרטי השליח וזמן ההגעה המשוער. העדכונים נשלחים באופן אוטומטי לפני ההגעה.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    
-
-    
-            <!-- FAQ 5 - אינטגרציה עם אתר -->
-            <div class="faq-card">
-                <div class="faq-header">
-                    <div class="faq-icon-wrapper">
-                        <div class="faq-icon">
-                            <i class="fas fa-sync"></i>
-                        </div>
-                    </div>
-                    <div class="faq-content">
-                        <h3 class="faq-question" onclick="toggleAnswer(this)">
-                            <span>האם ניתן לחבר את המערכת ישירות לאתר המכירות?</span>
-                            <div class="faq-toggle">
-                                <i class="fas fa-chevron-down"></i>
-                            </div>
-                        </h3>
-                        <div class="faq-answer">
-                            <div class="faq-answer-content">
-                                <p>כן! באמצעות ממשק API מתקדם, ניתן לחבר את המערכת ישירות לאתר המכירות שלכם. המערכת תעביר באופן אוטומטי את פרטי ההזמנות לשליחים דרך WhatsApp, כולל כל המידע הנדרש: פרטי הלקוח, כתובת המשלוח וזמני ההגעה המתוכננים.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    
-<!-- FAQ האחרון - מערכת ניהול -->
-<div class="faq-card">
-    <div class="faq-header">
-        <div class="faq-icon-wrapper">
-            <div class="faq-icon">
-                <i class="fas fa-mobile-alt"></i>
-            </div>
-        </div>
-        <div class="faq-content">
-            <h3 class="faq-question" onclick="toggleAnswer(this)">
-                <span>מה כוללת מערכת הניהול המתקדמת?</span>
-                <div class="faq-toggle">
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-            </h3>
-            <div class="faq-answer">
-                <div class="faq-answer-content">
-                    <p>מערכת Tracer Logistics כוללת:</p>
-                    <div class="feature-list">
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <i class="fas fa-mobile-alt"></i>
-                            </div>
-                            <div class="feature-text">אפליקציה ייעודית לשליחים עם תיעוד חתימות וצילומים</div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <i class="fas fa-tachometer-alt"></i>
-                            </div>
-                            <div class="feature-text">דשבורד ניהולי מתקדם למנהלים</div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <i class="fas fa-route"></i>
-                            </div>
-                            <div class="feature-text">אופטימיזציית מסלולים חכמה</div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <i class="fas fa-bell"></i>
-                            </div>
-                            <div class="feature-text">מעקב והתראות בזמן אמת</div>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <i class="fas fa-chart-pie"></i>
-                            </div>
-                            <div class="feature-text">דוחות אנליטיים מפורטים</div>
-                        </div>
-                    </div>
-                    <div class="faq-images">
-                        <img src="https://i.ibb.co/Rbvm21v/1.png" alt="אפליקציית שליחים" class="faq-image">
-                        <img src="https://i.ibb.co/MRJFGtG/image.png" alt="דשבורד ניהולי" class="faq-image">
-                    </div>
-                    <a href="https://drive.google.com/file/d/1ylV26CB2nF33zFPCRB2rNUeHina8EU11/view" target="_blank" class="presentation-link">
-                        <i class="fas fa-file-powerpoint"></i>
-                        צפייה במצגת המלאה של מערכת הלוגיסטיקה
-                    </a>
                 </div>
             </div>
         </div>
-    </div>
- </div>
+        
+        <!-- FAQ 2 - התראות הגעה -->
+        <div class="faq-card">
+            <div class="faq-header">
+                <div class="faq-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="faq-content">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>האם ניתן לקבל התראת WhatsApp בהגעת השליח?</span>
+                        <div class="faq-toggle">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>כן! המערכת שולחת התראות אוטומטיות ב-WhatsApp המעדכנות בזמן אמת על הגעת השליח ליעד.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- FAQ 3 - עדכון לקוחות -->
+        <div class="faq-card">
+            <div class="faq-header">
+                <div class="faq-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="faq-content">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>כיצד מתבצע עדכון הלקוחות על זמני ההגעה?</span>
+                        <div class="faq-toggle">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>המערכת מעבירה הודעות מותאמות אישית ללקוחות, הכוללות את פרטי השליח וזמן ההגעה המשוער. העדכונים נשלחים באופן אוטומטי לפני ההגעה.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- FAQ 4 - אינטגרציה עם אתר -->
+        <div class="faq-card">
+            <div class="faq-header">
+                <div class="faq-icon">
+                    <i class="fas fa-sync"></i>
+                </div>
+                <div class="faq-content">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>האם ניתן לחבר את המערכת ישירות לאתר המכירות?</span>
+                        <div class="faq-toggle">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>כן! באמצעות ממשק API מתקדם, ניתן לחבר את המערכת ישירות לאתר המכירות שלכם. המערכת תעביר באופן אוטומטי את פרטי ההזמנות לשליחים דרך WhatsApp, כולל כל המידע הנדרש: פרטי הלקוח, כתובת המשלוח וזמני ההגעה המתוכננים.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- FAQ 5 - מערכת ניהול -->
+        <div class="faq-card">
+            <div class="faq-header">
+                <div class="faq-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <div class="faq-content">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>מה כוללת מערכת הניהול המתקדמת?</span>
+                        <div class="faq-toggle">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>מערכת Tracer Logistics כוללת:</p>
+                            <div class="feature-list">
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-mobile-alt"></i>
+                                    </div>
+                                    <div class="feature-text">אפליקציה ייעודית לשליחים עם תיעוד חתימות וצילומים</div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-tachometer-alt"></i>
+                                    </div>
+                                    <div class="feature-text">דשבורד ניהולי מתקדם למנהלים</div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-route"></i>
+                                    </div>
+                                    <div class="feature-text">אופטימיזציית מסלולים חכמה</div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-bell"></i>
+                                    </div>
+                                    <div class="feature-text">מעקב והתראות בזמן אמת</div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-chart-pie"></i>
+                                    </div>
+                                    <div class="feature-text">דוחות אנליטיים מפורטים</div>
+                                </div>
+                            </div>
+                            <div class="faq-images">
+                                <img src="https://i.ibb.co/Rbvm21v/1.png" alt="אפליקציית שליחים" class="faq-image">
+                                <img src="https://i.ibb.co/MRJFGtG/image.png" alt="דשבורד ניהולי" class="faq-image">
+                            </div>
+                            <a href="https://drive.google.com/file/d/1ylV26CB2nF33zFPCRB2rNUeHina8EU11/view" target="_blank" class="presentation-link">
+                                <i class="fas fa-file-powerpoint"></i>
+                                צפייה במצגת המלאה של מערכת הלוגיסטיקה
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            <!-- FAQ 2-5 באותו פורמט -->
+        </div>
+        </div>
     </section>
 
-    </section>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            gsap.from('.title', {
-                y: 30,
-                opacity: 0,
-                duration: 1,
-                delay: 0.5
-            });
+        // FAQ Data
+        const faqData = [
+            {
+                icon: 'fa-location-dot',
+                question: 'האם אפשר לדעת את מיקום השליחים והטכנאים בזמן אמת?',
+                content: `
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                            <div class="feature-text">עמידה בתקני אבטחת מידע ISO/IEC 27001</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                            <div class="feature-text">דו״חות מתקדמים בזמן אמת</div>
+                        </div>
+                        <!-- Add more features as needed -->
+                    </div>
+                `
+            },
+            // Add more FAQ items
+        ];
 
-            gsap.from('.subtitle', {
-                y: 20,
-                opacity: 0,
-                duration: 1,
-                delay: 0.7
-            });
+        // Initialize FAQ Section
+        document.addEventListener('DOMContentLoaded', function() {
+    gsap.registerPlugin(ScrollTrigger);
+
+    // אנימציות כניסה
+    gsap.from('.title', {
+        y: 30,
+        opacity: 0,
+        duration: 1,
+        delay: 0.5
+    });
+
+    gsap.from('.subtitle', {
+        y: 20,
+        opacity: 0,
+        duration: 1,
+        delay: 0.7
+    });
+
+    // אנימציות FAQ
+    gsap.utils.toArray('.faq-card').forEach((card, i) => {
+        gsap.from(card, {
+            scrollTrigger: {
+                trigger: card,
+                start: 'top bottom-=100',
+                toggleActions: 'play none none reverse'
+            },
+            y: 30,
+            opacity: 0,
+            duration: 0.6,
+            delay: i * 0.1
         });
-        function toggleAnswer(element) {
-    element.classList.toggle('active');
+    });
+});
+
+function toggleAnswer(element) {
+    const isActive = element.classList.contains('active');
     const answer = element.nextElementSibling;
     
-    if (element.classList.contains('active')) {
+    // סגירת כל התשובות הפתוחות
+    document.querySelectorAll('.faq-question.active').forEach(item => {
+        if (item !== element) {
+            item.classList.remove('active');
+            item.nextElementSibling.style.height = '0';
+        }
+    });
+
+    // הפעלת/כיבוי התשובה הנוכחית
+    element.classList.toggle('active');
+    if (!isActive) {
         answer.style.height = answer.scrollHeight + 'px';
     } else {
         answer.style.height = '0';
     }
 }
+
+// טיפול בשינוי גודל החלון
+window.addEventListener('resize', () => {
+    document.querySelectorAll('.faq-question.active').forEach(question => {
+        const answer = question.nextElementSibling;
+        answer.style.height = answer.scrollHeight + 'px';
+    });
+});
+
+// טיפול בלחיצה מחוץ לשאלה
+document.addEventListener('click', (event) => {
+    if (!event.target.closest('.faq-question')) {
+        document.querySelectorAll('.faq-question.active').forEach(item => {
+            item.classList.remove('active');
+            item.nextElementSibling.style.height = '0';
+        });
+    }
+});
     </script>
 </body>
 </html>
