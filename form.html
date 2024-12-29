@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tracer - הזנת נקודות</title>
-
+    
     <!-- Core Libraries -->
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -15,200 +15,365 @@
         :root {
             --primary: #2DD4BF;
             --dark: #1F2937;
-            --accent: #F59E0B;
+            --accent: #8B5CF6;
             --vh: 100%;
         }
 
-        body {
-            font-family: 'Rubik', sans-serif;
-            background: var(--dark);
-            color: white;
-            height: 100vh;
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        body {
+            background: var(--dark);
+            height: 100vh;
+            height: calc(var(--vh, 1vh) * 100);
             overflow: hidden;
+            color: white;
+            position: fixed;
+            width: 100%;
+        }
+
+        .intro-container {
+            position: fixed;
+            inset: 0;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            z-index: 10;
+            padding: 1.5rem;
         }
 
-        .logo-container {
-            margin-bottom: 1rem;
+        .intro-logo {
+            width: 180px;
+            opacity: 0;
+            margin-bottom: 2rem;
         }
 
-        .logo {
-            width: 200px;
-            filter: drop-shadow(0 0 10px rgba(45, 212, 191, 0.3));
-        }
-
-        .message-container {
+        .intro-box {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid rgba(45, 212, 191, 0.2);
             text-align: center;
             opacity: 0;
+            transform: translateY(20px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
         }
 
-        .message-icon {
-            font-size: 3rem;
+        .whatsapp-icon {
+            font-size: 2.5rem;
             color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .message-text {
-            font-size: 1rem;
-            line-height: 1.6;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 10px rgba(45, 212, 191, 0.5));
         }
 
         .form-container {
-            width: 90%;
-            max-width: 400px;
-            background: rgba(255, 255, 255, 0.1);
+            position: fixed;
+            inset: 0;
+            display: none;
+            opacity: 0;
             padding: 1rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
+        }
+
+        .form-logo {
+            width: 120px;
+            margin: 0.5rem auto;
             opacity: 0;
         }
 
-        .input-group {
-            margin-bottom: 1rem;
-        }
-
-        .input-label {
-            color: var(--primary);
-            font-size: 0.9rem;
-            margin-bottom: 0.3rem;
-            text-align: right;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 0.6rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(45, 212, 191, 0.3);
-            border-radius: 8px;
-            color: white;
-            font-size: 1rem;
-        }
-
         .order-counter {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
             background: var(--primary);
             color: var(--dark);
             padding: 0.5rem 1rem;
             border-radius: 20px;
             font-weight: 500;
-            font-size: 0.9rem;
-            text-align: center;
-            margin-bottom: 1rem;
+            opacity: 0;
         }
 
-        .points-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
+        .fields-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.6rem;
+            margin-top: 0.5rem;
+            height: calc(100% - 80px);
         }
 
-        .point {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.8rem;
-            border-radius: 10px;
+        .field-full {
+            grid-column: 1 / -1;
+        }
+
+        .input-group {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 0.6rem;
+            border: 1px solid rgba(45, 212, 191, 0.2);
+            opacity: 0;
+        }
+
+        .input-label {
+            color: var(--primary);
+            font-size: 0.85rem;
+            margin-bottom: 0.2rem;
+            font-weight: 500;
+        }
+
+        .input-field {
             width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            border-radius: 8px;
             color: white;
-        }
-
-        .point-title {
-            font-size: 1rem;
-            color: var(--accent);
-            font-weight: bold;
-            margin-bottom: 0.3rem;
-        }
-
-        .point-details {
             font-size: 0.9rem;
-            line-height: 1.4;
+        }
+
+        @media (max-height: 700px) {
+            .input-group {
+                padding: 0.4rem;
+            }
+            
+            .input-field {
+                padding: 0.4rem;
+            }
+            
+            .form-logo {
+                width: 100px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Logo -->
-    <div class="logo-container">
-        <img src="https://tracer.co.il/wp-content/uploads/elementor/thumbs/Logo-H-p8d906f0bmrgobnn9uwquzibery89mtbvr1plpc910.png" alt="Tracer Logo" class="logo">
-    </div>
-
-    <!-- Initial Message -->
-    <div class="message-container">
-        <i class="fab fa-whatsapp message-icon"></i>
-        <p class="message-text">בעל העסק מזין את הנקודות במערכת,<br>
-            המערכת מייעלת את המסלולים ושולחת<br>
-            הודעה אישית מותאמת בוואטסאפ לכל שליח</p>
-    </div>
-
-    <!-- Points Simulation -->
-    <div class="form-container">
-        <div class="order-counter">הזמנה 1 מתוך 5</div>
-
-        <div class="points-container">
-            <div class="point">
-                <div class="point-title">נקודה 1</div>
-                <div class="point-details">
-                    שם פרטי: רונית<br>
-                    שם משפחה: שמש<br>
-                    טלפון: 0501234567<br>
-                    כתובת מלאה: הברזל 30, תל אביב<br>
-                    משימה: משלוח קל<br>
-                    הערות: בדוק מראש<br>
-                    תאריך ושעה: 2024-12-29 10:00<br>
-                    הגדרות מיוחדות: שירות מהיר<br>
-                    נקודת יציאה: מחסן מרכזי<br>
-                    נקודת סיום: תחנה מרכזית
-                </div>
-            </div>
-
-            <div class="point">
-                <div class="point-title">נקודה 2</div>
-                <div class="point-details">
-                    שם פרטי: דני<br>
-                    שם משפחה: לוי<br>
-                    טלפון: 0529876543<br>
-                    כתובת מלאה: דיזנגוף 99, תל אביב<br>
-                    משימה: משלוח בינוני<br>
-                    הערות: הביאו מסמכים<br>
-                    תאריך ושעה: 2024-12-29 11:30<br>
-                    הגדרות מיוחדות: אחסון זמני<br>
-                    נקודת יציאה: מחסן צפוני<br>
-                    נקודת סיום: נמל חיפה
-                </div>
-            </div>
+    <!-- Intro Screen -->
+    <div class="intro-container">
+        <img src="https://tracer.co.il/wp-content/uploads/elementor/thumbs/Logo-H-p8d906f0bmrgobnn9uwquzibery89mtbvr1plpc910.png" 
+             alt="Tracer Logo" 
+             class="intro-logo">
+        
+        <div class="intro-box">
+            <i class="fab fa-whatsapp whatsapp-icon"></i>
+            <p class="text-lg leading-relaxed">
+                בעל העסק מזין את הנקודות במערכת,<br>
+                המערכת מייעלת את המסלולים ושולחת<br>
+                הודעה אישית מותאמת בוואטסאפ לכל שליח
+            </p>
         </div>
     </div>
 
+    <!-- Form Screen -->
+    <div class="form-container">
+        <div class="order-counter">הזמנה 1 מתוך 10</div>
+        
+        <img src="https://tracer.co.il/wp-content/uploads/elementor/thumbs/Logo-H-p8d906f0bmrgobnn9uwquzibery89mtbvr1plpc910.png" 
+             alt="Tracer Logo" 
+             class="form-logo">
+
+        <div class="fields-grid">
+            <div class="input-group">
+                <div class="input-label">שם פרטי</div>
+                <input type="text" class="input-field" readonly>
+            </div>
+
+            <div class="input-group">
+                <div class="input-label">שם משפחה</div>
+                <input type="text" class="input-field" readonly>
+            </div>
+
+            <div class="input-group">
+                <div class="input-label">טלפון</div>
+                <input type="text" class="input-field" readonly>
+            </div>
+
+            <div class="input-group field-full">
+                <div class="input-label">כתובת מלאה</div>
+                <input type="text" class="input-field" readonly>
+            </div>
+
+            <div class="input-group">
+                <div class="input-label">תאריך</div>
+                <input type="text" class="input-field" readonly>
+            </div>
+
+            <div class="input-group">
+                <div class="input-label">שעת הגעה</div>
+                <input type="text" class="input-field" readonly>
+            </div>
+
+            <div class="input-group">
+                <div class="input-label">סוג משימה</div>
+                <input type="text" class="input-field" readonly>
+            </div>
+
+            <div class="input-group">
+                <div class="input-label">הערות</div>
+                <input type="text" class="input-field" readonly>
+            </div>
+
+            <div class="input-group">
+                <div class="input-label">נקודת יציאה</div>
+                <input type="text" class="input-field" readonly>
+            </div>
+
+            <div class="input-group">
+                <div class="input-label">נקודת סיום</div>
+                <input type="text" class="input-field" readonly>
+            </div>
+        </div>
+    </div>
     <script>
+        // תיקון גובה למובייל
         function setMobileHeight() {
             let vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);
         }
         setMobileHeight();
         window.addEventListener('resize', setMobileHeight);
-
+        window.addEventListener('orientationchange', setMobileHeight);
+    
+        // נתוני דוגמה
+        const mockData = {
+            firstNames: ['רונית', 'דני', 'מיכל', 'אבי', 'שירה', 'יעל', 'עידן', 'נועה'],
+            lastNames: ['שמש', 'לוי', 'כהן', 'ישראלי', 'דוד', 'אברהם', 'פרץ'],
+            phones: ['050-1234567', '052-7654321', '054-9876543', '053-1472583', '058-3697412'],
+            addresses: [
+                'הברזל 30 תל אביב',
+                'דיזנגוף 99 תל אביב',
+                'ביאליק 15 רמת גן',
+                'סוקולוב 55 הרצליה',
+                'רוטשילד 123 ראשון לציון'
+            ],
+            tasks: ['משלוח קל', 'משלוח בינוני', 'משלוח כבד', 'איסוף דחוף'],
+            notes: ['להתקשר לפני הגעה', 'יש מעלית', 'קומה 3', 'חניה בחינם', 'לתאם טלפונית'],
+            warehouses: ['מחסן מרכזי - תל אביב', 'מחסן צפון - הרצליה', 'מחסן דרום - ראשל"צ'],
+            times: ['09:00', '10:30', '12:00', '13:30', '15:00', '16:30']
+        };
+    
+        // אנימציית הקלדה
+        async function typeText(element, text, speed = 15) {
+            element.value = '';
+            for (let char of text.split('')) {
+                element.value += char;
+                await new Promise(resolve => setTimeout(resolve, speed));
+            }
+        }
+    
+        // אנימציית טופס
+        async function fillForm(orderNum) {
+            document.querySelector('.order-counter').textContent = `הזמנה ${orderNum} מתוך 10`;
+    
+            gsap.to('.input-group', {
+                opacity: 1,
+                duration: 0.1,
+                stagger: 0.03
+            });
+    
+            const fields = document.querySelectorAll('.input-field');
+            
+            if (orderNum === 1) {
+                // הזמנה ראשונה - הקלדה איטית לשתי נקודות ראשונות
+                await typeText(fields[0], 'רונית', 100);      // שם פרטי - איטי
+                await typeText(fields[1], 'שמש', 100);       // שם משפחה - איטי
+                await typeText(fields[2], '050-1234567', 20); 
+                await typeText(fields[3], 'הברזל 30 תל אביב', 20);
+                await typeText(fields[4], '29/12/2024', 20);
+                await typeText(fields[5], '09:00', 20);
+                await typeText(fields[6], 'משלוח בינוני', 20);
+                await typeText(fields[7], 'להתקשר לפני הגעה', 20);
+                await typeText(fields[8], 'מחסן מרכזי - תל אביב', 20);
+                await typeText(fields[9], 'מחסן דרום - ראשל"צ', 20);
+            } else {
+                // שאר ההזמנות - מילוי מקבילי מהיר
+                const data = {
+                    firstName: mockData.firstNames[Math.floor(Math.random() * mockData.firstNames.length)],
+                    lastName: mockData.lastNames[Math.floor(Math.random() * mockData.lastNames.length)],
+                    phone: mockData.phones[Math.floor(Math.random() * mockData.phones.length)],
+                    address: mockData.addresses[Math.floor(Math.random() * mockData.addresses.length)],
+                    date: '29/12/2024',
+                    time: mockData.times[Math.floor(Math.random() * mockData.times.length)],
+                    task: mockData.tasks[Math.floor(Math.random() * mockData.tasks.length)],
+                    note: mockData.notes[Math.floor(Math.random() * mockData.notes.length)],
+                    startPoint: mockData.warehouses[Math.floor(Math.random() * mockData.warehouses.length)],
+                    endPoint: mockData.warehouses[Math.floor(Math.random() * mockData.warehouses.length)]
+                };
+    
+                await Promise.all([
+                    typeText(fields[0], data.firstName, 10),
+                    typeText(fields[1], data.lastName, 10),
+                    typeText(fields[2], data.phone, 10),
+                    typeText(fields[3], data.address, 10),
+                    typeText(fields[4], data.date, 10),
+                    typeText(fields[5], data.time, 10),
+                    typeText(fields[6], data.task, 10),
+                    typeText(fields[7], data.note, 10),
+                    typeText(fields[8], data.startPoint, 10),
+                    typeText(fields[9], data.endPoint, 10)
+                ]);
+            }
+    
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    gsap.to('.input-group', {
+                        opacity: 0,
+                        duration: 0.1,
+                        stagger: 0.02,
+                        onComplete: resolve
+                    });
+                }, 50);
+            });
+        }
+    
+        // רצף אנימציות ראשי
         document.addEventListener('DOMContentLoaded', () => {
-            const messageContainer = document.querySelector('.message-container');
-            const formContainer = document.querySelector('.form-container');
-
-            // Show message animation
-            gsap.to(messageContainer, { opacity: 1, duration: 1, delay: 0.5 });
-
-            setTimeout(() => {
-                gsap.to(messageContainer, { opacity: 0, duration: 1 });
-                gsap.to(formContainer, { opacity: 1, duration: 1, delay: 1 });
-            }, 3000);
-
-            // Redirect after 8 seconds
-            setTimeout(() => {
-                window.location.href = 'optimization.html';
-            }, 8000);
+            const tl = gsap.timeline();
+    
+            tl.to('.intro-logo', {
+                opacity: 1,
+                scale: 1,
+                duration: 0.5,
+                ease: "back.out(1.7)"
+            })
+            .to('.intro-box', {
+                opacity: 1,
+                y: 0,
+                duration: 0.4
+            })
+            .to('.intro-container', {
+                opacity: 0,
+                duration: 0.3,
+                delay: 0.8,
+                onComplete: async () => {
+                    document.querySelector('.intro-container').style.display = 'none';
+                    document.querySelector('.form-container').style.display = 'block';
+    
+                    gsap.to('.form-container', { opacity: 1, duration: 0.2 });
+                    gsap.to('.form-logo', { opacity: 1, scale: 1, duration: 0.2 });
+                    gsap.to('.order-counter', {
+                        opacity: 1,
+                        x: 0,
+                        duration: 0.2,
+                        onComplete: async () => {
+                            for (let i = 1; i <= 10; i++) {
+                                await fillForm(i);
+                                if (i === 10) {
+                                    gsap.to('.form-container', {
+                                        opacity: 0,
+                                        duration: 0.3,
+                                        onComplete: () => {
+                                            window.location.href = 'optimization.html';
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+            });
         });
     </script>
-</body>
-</html>
