@@ -2,81 +2,91 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Tracer - מערכת ניהול מסלולים</title>
+    
+    <!-- Core Libraries -->
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Rubik', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
-        :root {
-            --app-height: 100%;
-        }
-
         body {
-            width: 100%;
-            height: var(--app-height);
+            font-family: 'Rubik', sans-serif;
             overflow: hidden;
             background: #1F2937;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            height: 100vh;
+            height: calc(var(--vh, 1vh) * 100);
         }
 
         .video-container {
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
+            width: 100%;
+            height: 100%;
             overflow: hidden;
-            z-index: 1;
         }
 
         .video-overlay {
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(31, 41, 55, 0.8);
+            width: 100%;
+            height: 100%;
+            background: rgba(17, 24, 39, 0.85);
             z-index: 2;
         }
 
-        iframe {
+        #player {
             position: absolute;
+            width: 100vw;
+            height: 100vh;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 100vh; /* זה יבטיח שהוידאו תמיד ימלא את גובה המסך */
-            height: 100vh;
             pointer-events: none;
         }
 
+        /* הסתרת אלמנטים של YouTube */
+        .ytp-chrome-top,
+        .ytp-chrome-bottom,
+        .ytp-watermark,
+        .ytp-show-cards-title,
+        iframe[src*="youtube.com"] > .ytp-pause-overlay {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+        }
+
+        /* הסתרת הלוגו של BIS */
+        .bis-container {
+            display: none !important;
+        }
+
         .content {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 3;
+            position: relative;
+            z-index: 10;
+            height: 100vh;
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 5vw;
+            padding: 5vh 5vw;
+            text-align: center;
         }
 
         .logo-container {
-            width: 70vw; /* רוחב יחסי למסך */
+            width: 70%;
             max-width: 250px;
             margin-bottom: 5vh;
             opacity: 0;
@@ -89,32 +99,33 @@
         }
 
         .title {
-            color: #fff;
-            font-size: 6vw; /* גודל טקסט יחסי לרוחב המסך */
+            color: white;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
             margin-bottom: 2vh;
-            text-align: center;
             opacity: 0;
         }
 
         .subtitle {
             color: #2DD4BF;
-            font-size: 4vw;
+            font-size: clamp(1rem, 4vw, 1.5rem);
             margin-bottom: 5vh;
-            text-align: center;
             opacity: 0;
         }
 
         .countdown {
-            font-size: 20vw;
-            font-weight: bold;
             color: #2DD4BF;
+            font-size: clamp(4rem, 15vw, 8rem);
+            font-weight: bold;
             opacity: 0;
-            text-shadow: 0 0 20px rgba(45, 212, 191, 0.5);
-            position: relative;
-            width: 100%;
-            text-align: center;
             margin-top: auto;
-            padding-bottom: 10vh;
+            text-shadow: 0 0 20px rgba(45, 212, 191, 0.5);
+        }
+
+        /* תיקון למובייל */
+        @supports (-webkit-touch-callout: none) {
+            .content {
+                height: -webkit-fill-available;
+            }
         }
     </style>
 </head>
@@ -136,16 +147,6 @@
     </main>
 
     <script>
-        // תיקון גובה עבור מובייל
-        function setMobileHeight() {
-            const vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
-        }
-        
-        window.addEventListener('resize', setMobileHeight);
-        window.addEventListener('orientationchange', setMobileHeight);
-        setMobileHeight();
-
         // YouTube API
         function loadYouTubeAPI() {
             const tag = document.createElement('script');
@@ -156,9 +157,8 @@
 
         loadYouTubeAPI();
 
-        let player;
         window.onYouTubeIframeAPIReady = function() {
-            player = new YT.Player('player', {
+            new YT.Player('player', {
                 videoId: 'Iaiu9ChqN9A',
                 playerVars: {
                     autoplay: 1,
@@ -166,18 +166,38 @@
                     disablekb: 1,
                     enablejsapi: 1,
                     fs: 0,
-                    loop: 1,
                     modestbranding: 1,
                     playsinline: 1,
                     rel: 0,
                     showinfo: 0,
                     mute: 1,
-                    playlist: 'Iaiu9ChqN9A'
+                    loop: 1,
+                    playlist: 'Iaiu9ChqN9A',
+                    origin: window.location.origin,
+                    widget_referrer: window.location.origin,
+                    iv_load_policy: 3
                 },
                 events: {
                     onReady: (e) => {
                         e.target.playVideo();
                         startAnimations();
+                        
+                        // הסתרת אלמנטים של YouTube
+                        const iframe = e.target.getIframe();
+                        if (iframe) {
+                            const iframeDoc = iframe.contentWindow.document;
+                            const style = iframeDoc.createElement('style');
+                            style.textContent = `
+                                .ytp-chrome-top,
+                                .ytp-chrome-bottom,
+                                .ytp-watermark,
+                                .ytp-show-cards-title,
+                                .ytp-pause-overlay {
+                                    display: none !important;
+                                }
+                            `;
+                            iframeDoc.head.appendChild(style);
+                        }
                     }
                 }
             });
@@ -249,6 +269,16 @@
                 }
             }, 1000);
         }
+
+        // תיקון גובה למובייל
+        function setMobileHeight() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+
+        window.addEventListener('resize', setMobileHeight);
+        window.addEventListener('orientationchange', setMobileHeight);
+        setMobileHeight();
     </script>
 </body>
 </html>
