@@ -2,8 +2,8 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tracer - מערכת ניהול מסלולים</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Tracer - אופטימיזציית מסלולים חכמה</title>
     
     <!-- Core Libraries -->
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -14,12 +14,16 @@
     <style>
         :root {
             --vh: 100%;
+            --primary: #2DD4BF;
+            --secondary: #A78BFA;
+            --dark: #1F2937;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -27,10 +31,11 @@
             height: 100vh;
             height: calc(var(--vh, 1vh) * 100);
             overflow: hidden;
-            background: #1F2937;
+            background: var(--dark);
             font-family: 'Rubik', sans-serif;
         }
 
+        /* Video Container */
         .video-wrapper {
             position: fixed;
             top: 0;
@@ -48,9 +53,11 @@
             width: 100vw;
             height: 100vh;
             pointer-events: none;
-            opacity: 0.6; /* עמעום הוידאו */
+            opacity: 0.6;
+            filter: grayscale(0.2) brightness(0.8);
         }
 
+        /* Overlay */
         .overlay {
             position: fixed;
             top: 0;
@@ -62,6 +69,7 @@
             pointer-events: none;
         }
 
+        /* Main Content */
         .content {
             position: fixed;
             top: 0;
@@ -72,14 +80,16 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             padding: 5vh 5vw;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
+        /* Logo */
         .logo-container {
             width: 70%;
             max-width: 250px;
-            margin-bottom: 10vh;
+            margin-bottom: 4vh;
             opacity: 0;
         }
 
@@ -89,32 +99,71 @@
             filter: drop-shadow(0 0 15px rgba(45, 212, 191, 0.4));
         }
 
+        /* Typography */
         .title {
-            font-size: 8vw;
+            font-size: 7vw;
             color: white;
             text-align: center;
             margin-bottom: 3vh;
             opacity: 0;
             font-weight: bold;
+            line-height: 1.3;
         }
 
-        .subtitle {
-            font-size: 5vw;
-            color: #2DD4BF;
-            text-align: center;
+        .description {
+            width: 90%;
+            margin: 0 auto;
             opacity: 0;
         }
 
+        .main-subtitle {
+            color: var(--primary);
+            font-size: 4.5vw;
+            text-align: center;
+            margin-bottom: 4vh;
+            line-height: 1.4;
+            opacity: 0;
+        }
+
+        /* Features List */
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 4vh;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            color: white;
+            font-size: 4vw;
+            margin-bottom: 3vh;
+            opacity: 0;
+            transform: translateX(-20px);
+            line-height: 1.4;
+            padding: 0 2vw;
+        }
+
+        .feature-item i {
+            color: var(--primary);
+            margin-left: 10px;
+            font-size: 5vw;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        /* Countdown */
         .countdown {
             font-size: 20vw;
-            color: #2DD4BF;
+            color: var(--primary);
             margin-top: auto;
             opacity: 0;
             font-weight: bold;
             text-shadow: 0 0 20px rgba(45, 212, 191, 0.5);
+            margin-bottom: 5vh;
         }
 
-        /* תיקון יחס תצוגה לוידאו */
+        /* Video Aspect Ratio Fixes */
         @media (min-aspect-ratio: 16/9) {
             .video-wrapper iframe {
                 width: 100vw;
@@ -129,13 +178,26 @@
             }
         }
 
-        /* הסתרת ממשק YouTube */
-        .video-wrapper iframe {
-            filter: grayscale(0.2) brightness(0.8);
+        /* Responsive Adjustments */
+        @media (min-width: 768px) {
+            .feature-item {
+                font-size: 16px;
+            }
+            .feature-item i {
+                font-size: 20px;
+            }
+        }
+
+        /* iOS Height Fix */
+        @supports (-webkit-touch-callout: none) {
+            body {
+                height: -webkit-fill-available;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Video Background -->
     <div class="video-wrapper">
         <iframe
             src="https://www.youtube.com/embed/Iaiu9ChqN9A?si=pdNOKc9nVzayYtjw&controls=0&autoplay=1&mute=1&loop=1&playlist=Iaiu9ChqN9A&modestbranding=1&showinfo=0&rel=0&iv_load_policy=3"
@@ -145,21 +207,54 @@
         </iframe>
     </div>
     
+    <!-- Dark Overlay -->
     <div class="overlay"></div>
 
+    <!-- Main Content -->
     <main class="content">
+        <!-- Logo -->
         <div class="logo-container">
             <img src="https://tracer.co.il/wp-content/uploads/elementor/thumbs/Logo-H-p8d906f0bmrgobnn9uwquzibery89mtbvr1plpc910.png" 
                  alt="Tracer Logo" 
                  class="logo">
         </div>
+        
+        <!-- Title & Features -->
         <h1 class="title">אופטימיזציית מסלולים חכמה</h1>
-        <p class="subtitle">המערכת המתקדמת לניהול משימות</p>
+        
+        <div class="description">
+            <p class="main-subtitle">המערכת המתקדמת שמביאה פתרונות מותאמים אישית לשליחים וטכנאים.</p>
+            
+            <ul class="features-list">
+                <li class="feature-item">
+                    <i class="fas fa-route"></i>
+                    סידור מסלולים אוטומטי, כולל התחשבות בזמני הגעה ללקוח ובפקקי תנועה
+                </li>
+                <li class="feature-item">
+                    <i class="fab fa-whatsapp"></i>
+                    שליחה לנקודות ישירות לנהגים באמצעות WhatsApp
+                </li>
+                <li class="feature-item">
+                    <i class="far fa-clock"></i>
+                    חיסכון בזמן לבעל העסק – סידור נקודות מהיר ויעיל
+                </li>
+                <li class="feature-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    חיסכון בזמן לשליח – נסיעות מתוכננות ואפקטיביות, בלי צורך להקליד את הכתובת בוויז
+                </li>
+                <li class="feature-item">
+                    <i class="fas fa-road"></i>
+                    חיסכון בקילומטרים – מסלולים קצרים, מדויקים וחכמים
+                </li>
+            </ul>
+        </div>
+
+        <!-- Countdown -->
         <div class="countdown">3</div>
     </main>
 
     <script>
-        // תיקון גובה למובייל
+        // Mobile Height Fix
         function setMobileHeight() {
             let vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -169,10 +264,11 @@
         window.addEventListener('resize', setMobileHeight);
         window.addEventListener('orientationchange', setMobileHeight);
 
-        // אנימציות
+        // Animations
         document.addEventListener('DOMContentLoaded', () => {
             const tl = gsap.timeline();
 
+            // Logo Animation
             tl.fromTo('.logo-container', 
                 {
                     opacity: 0,
@@ -187,16 +283,26 @@
                     ease: "elastic.out(1, 0.3)"
                 }
             )
+            // Title Animation
             .to('.title', {
                 opacity: 1,
                 y: 0,
-                duration: 0.5
+                duration: 0.7
             })
-            .to('.subtitle', {
+            // Main Subtitle Animation
+            .to('.main-subtitle', {
                 opacity: 1,
                 y: 0,
-                duration: 0.5
+                duration: 0.7
             })
+            // Features Animation
+            .to('.feature-item', {
+                opacity: 1,
+                x: 0,
+                duration: 0.5,
+                stagger: 0.2
+            })
+            // Countdown Animation
             .to('.countdown', {
                 opacity: 1,
                 duration: 0.5,
@@ -204,6 +310,7 @@
             });
         });
 
+        // Countdown Function
         function startCountdown() {
             const countdown = document.querySelector('.countdown');
             let count = 3;
