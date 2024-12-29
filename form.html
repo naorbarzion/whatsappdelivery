@@ -43,7 +43,7 @@
 
         .message-container {
             text-align: center;
-            margin-bottom: 1.5rem;
+            opacity: 0;
         }
 
         .message-icon {
@@ -65,6 +65,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
+            opacity: 0;
         }
 
         .input-group {
@@ -98,6 +99,36 @@
             text-align: center;
             margin-bottom: 1rem;
         }
+
+        .points-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .point {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.8rem;
+            border-radius: 10px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            color: white;
+        }
+
+        .point-title {
+            font-size: 1rem;
+            color: var(--accent);
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .point-details {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -114,58 +145,42 @@
             הודעה אישית מותאמת בוואטסאפ לכל שליח</p>
     </div>
 
-    <!-- Form -->
+    <!-- Points Simulation -->
     <div class="form-container">
-        <div class="order-counter">הזמנה 1 מתוך 20</div>
+        <div class="order-counter">הזמנה 1 מתוך 5</div>
 
-        <div class="input-group">
-            <label for="first-name" class="input-label">שם פרטי</label>
-            <input type="text" id="first-name" class="input-field" readonly>
-        </div>
+        <div class="points-container">
+            <div class="point">
+                <div class="point-title">נקודה 1</div>
+                <div class="point-details">
+                    שם פרטי: רונית<br>
+                    שם משפחה: שמש<br>
+                    טלפון: 0501234567<br>
+                    כתובת מלאה: הברזל 30, תל אביב<br>
+                    משימה: משלוח קל<br>
+                    הערות: בדוק מראש<br>
+                    תאריך ושעה: 2024-12-29 10:00<br>
+                    הגדרות מיוחדות: שירות מהיר<br>
+                    נקודת יציאה: מחסן מרכזי<br>
+                    נקודת סיום: תחנה מרכזית
+                </div>
+            </div>
 
-        <div class="input-group">
-            <label for="last-name" class="input-label">שם משפחה</label>
-            <input type="text" id="last-name" class="input-field" readonly>
-        </div>
-
-        <div class="input-group">
-            <label for="phone" class="input-label">טלפון</label>
-            <input type="text" id="phone" class="input-field" readonly>
-        </div>
-
-        <div class="input-group">
-            <label for="full-address" class="input-label">כתובת מלאה</label>
-            <input type="text" id="full-address" class="input-field" readonly>
-        </div>
-
-        <div class="input-group">
-            <label for="task" class="input-label">משימה</label>
-            <input type="text" id="task" class="input-field" readonly>
-        </div>
-
-        <div class="input-group">
-            <label for="notes" class="input-label">הערות</label>
-            <input type="text" id="notes" class="input-field" readonly>
-        </div>
-
-        <div class="input-group">
-            <label for="date-time" class="input-label">שעת ותאריך יעד</label>
-            <input type="datetime-local" id="date-time" class="input-field" readonly>
-        </div>
-
-        <div class="input-group">
-            <label for="special-settings" class="input-label">הגדרות מיוחדות</label>
-            <input type="text" id="special-settings" class="input-field" readonly>
-        </div>
-
-        <div class="input-group">
-            <label for="start-point" class="input-label">נקודת יציאה/מחסן</label>
-            <input type="text" id="start-point" class="input-field" readonly>
-        </div>
-
-        <div class="input-group">
-            <label for="end-point" class="input-label">נקודת סיום</label>
-            <input type="text" id="end-point" class="input-field" readonly>
+            <div class="point">
+                <div class="point-title">נקודה 2</div>
+                <div class="point-details">
+                    שם פרטי: דני<br>
+                    שם משפחה: לוי<br>
+                    טלפון: 0529876543<br>
+                    כתובת מלאה: דיזנגוף 99, תל אביב<br>
+                    משימה: משלוח בינוני<br>
+                    הערות: הביאו מסמכים<br>
+                    תאריך ושעה: 2024-12-29 11:30<br>
+                    הגדרות מיוחדות: אחסון זמני<br>
+                    נקודת יציאה: מחסן צפוני<br>
+                    נקודת סיום: נמל חיפה
+                </div>
+            </div>
         </div>
     </div>
 
@@ -177,52 +192,22 @@
         setMobileHeight();
         window.addEventListener('resize', setMobileHeight);
 
-        async function typeText(element, text) {
-            element.value = '';
-            for (let char of text) {
-                element.value += char;
-                await new Promise(resolve => setTimeout(resolve, 50));
-            }
-        }
-
-        async function fillForm(orderNum) {
-            document.querySelector('.order-counter').textContent = `הזמנה ${orderNum} מתוך 20`;
-
-            const mockData = {
-                firstName: ['רונית', 'דני', 'מיכל'][Math.floor(Math.random() * 3)],
-                lastName: ['שמש', 'לוי', 'כהן'][Math.floor(Math.random() * 3)],
-                phone: ['0501234567', '0529876543', '0547654321'][Math.floor(Math.random() * 3)],
-                address: ['הברזל 30 תל אביב', 'דיזנגוף 99 תל אביב', 'ביאליק 15 רמת גן'][Math.floor(Math.random() * 3)],
-                task: ['משלוח קל', 'משלוח בינוני', 'משלוח כבד'][Math.floor(Math.random() * 3)],
-                notes: ['בדוק מראש', 'הביאו מסמכים', 'נא להקפיד על לו"ז'][Math.floor(Math.random() * 3)],
-                dateTime: new Date().toISOString().slice(0, 16),
-                specialSettings: ['קירור', 'שירות מהיר', 'אחסון זמני'][Math.floor(Math.random() * 3)],
-                startPoint: ['מחסן מרכזי', 'מחסן צפוני', 'מחסן דרומי'][Math.floor(Math.random() * 3)],
-                endPoint: ['תחנה מרכזית', 'נמל חיפה', 'שדה תעופה'][Math.floor(Math.random() * 3)]
-            };
-
-            await typeText(document.getElementById('first-name'), mockData.firstName);
-            await typeText(document.getElementById('last-name'), mockData.lastName);
-            await typeText(document.getElementById('phone'), mockData.phone);
-            await typeText(document.getElementById('full-address'), mockData.address);
-            await typeText(document.getElementById('task'), mockData.task);
-            await typeText(document.getElementById('notes'), mockData.notes);
-            document.getElementById('date-time').value = mockData.dateTime;
-            await typeText(document.getElementById('special-settings'), mockData.specialSettings);
-            await typeText(document.getElementById('start-point'), mockData.startPoint);
-            await typeText(document.getElementById('end-point'), mockData.endPoint);
-        }
-
-        document.addEventListener('DOMContentLoaded', async () => {
+        document.addEventListener('DOMContentLoaded', () => {
+            const messageContainer = document.querySelector('.message-container');
             const formContainer = document.querySelector('.form-container');
-            gsap.from(formContainer, { opacity: 0, duration: 1 });
 
-            for (let i = 1; i <= 20; i++) {
-                await fillForm(i);
-                await new Promise(resolve => setTimeout(resolve, 500));
-            }
+            // Show message animation
+            gsap.to(messageContainer, { opacity: 1, duration: 1, delay: 0.5 });
 
-            window.location.href = 'optimization.html';
+            setTimeout(() => {
+                gsap.to(messageContainer, { opacity: 0, duration: 1 });
+                gsap.to(formContainer, { opacity: 1, duration: 1, delay: 1 });
+            }, 3000);
+
+            // Redirect after 8 seconds
+            setTimeout(() => {
+                window.location.href = 'optimization.html';
+            }, 8000);
         });
     </script>
 </body>
