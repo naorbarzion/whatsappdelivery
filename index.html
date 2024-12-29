@@ -1,348 +1,358 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Tracer - אופטימיזציית מסלולים חכמה</title>
-    
-    <!-- Core Libraries -->
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    
-    <style>
-        :root {
-            --vh: 100%;
-            --primary: #2DD4BF;
-            --secondary: #A78BFA;
-            --dark: #1F2937;
-        }
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+   <title>Tracer - אופטימיזציית מסלולים חכמה</title>
+   
+   <!-- Core Libraries -->
+   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+   <script src="https://cdn.tailwindcss.com"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+   
+   <style>
+       :root {
+           --vh: 100%;
+           --primary: #2DD4BF;
+           --secondary: #A78BFA;
+           --dark: #1F2937;
+       }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+       * {
+           margin: 0;
+           padding: 0;
+           box-sizing: border-box;
+           -webkit-tap-highlight-color: transparent;
+           font-family: 'Rubik', sans-serif;
+       }
 
-        body {
-            width: 100vw;
-            height: 100vh;
-            height: calc(var(--vh, 1vh) * 100);
-            overflow: hidden;
-            background: var(--dark);
-            font-family: 'Rubik', sans-serif;
-        }
+       body {
+           width: 100vw;
+           height: 100vh;
+           height: calc(var(--vh, 1vh) * 100);
+           overflow: hidden;
+           background: var(--dark);
+       }
 
-        /* Video Container */
-        .video-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
+       .video-wrapper {
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           z-index: 1;
+       }
 
-        .video-wrapper iframe {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            opacity: 0.6;
-            filter: grayscale(0.2) brightness(0.8);
-        }
+       .video-wrapper iframe {
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           transform: translate(-50%, -50%);
+           width: 100vw;
+           height: 100vh;
+           pointer-events: none;
+           opacity: 0.6;
+           filter: grayscale(0.2) brightness(0.8);
+       }
 
-        /* Overlay */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(17, 24, 39, 0.85);
-            z-index: 2;
-            pointer-events: none;
-        }
+       .overlay {
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           background: rgba(17, 24, 39, 0.85);
+           z-index: 2;
+       }
 
-        /* Main Content */
-        .content {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 3;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 5vh 5vw;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
+       .content {
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           z-index: 3;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           padding: 5vh 5vw;
+           overflow: hidden;
+       }
 
-        /* Logo */
-        .logo-container {
-            width: 70%;
-            max-width: 250px;
-            margin-bottom: 4vh;
-            opacity: 0;
-        }
+       .logo-container {
+           width: 60%;
+           max-width: 200px;
+           margin-bottom: 4vh;
+           opacity: 0;
+       }
 
-        .logo {
-            width: 100%;
-            height: auto;
-            filter: drop-shadow(0 0 15px rgba(45, 212, 191, 0.4));
-        }
+       .logo {
+           width: 100%;
+           height: auto;
+           filter: drop-shadow(0 0 15px rgba(45, 212, 191, 0.4));
+       }
 
-        /* Typography */
-        .title {
-            font-size: 7vw;
-            color: white;
-            text-align: center;
-            margin-bottom: 3vh;
-            opacity: 0;
-            font-weight: bold;
-            line-height: 1.3;
-        }
+       .title {
+           font-size: 6vw;
+           color: white;
+           text-align: center;
+           margin-bottom: 2vh;
+           opacity: 0;
+           font-weight: bold;
+       }
 
-        .description {
-            width: 90%;
-            margin: 0 auto;
-            opacity: 0;
-        }
+       .main-subtitle {
+           color: var(--primary);
+           font-size: 4vw;
+           text-align: center;
+           margin-bottom: 4vh;
+           opacity: 0;
+           width: 90%;
+       }
 
-        .main-subtitle {
-            color: var(--primary);
-            font-size: 4.5vw;
-            text-align: center;
-            margin-bottom: 4vh;
-            line-height: 1.4;
-            opacity: 0;
-        }
+       .features-container {
+           position: relative;
+           width: 100%;
+           height: 40vh;
+           margin: 2vh 0;
+       }
 
-        /* Features List */
-        .features-list {
-            list-style: none;
-            padding: 0;
-            margin-bottom: 4vh;
-        }
+       .feature-item {
+           display: flex;
+           align-items: center;
+           justify-content: flex-start;
+           position: absolute;
+           left: 50%;
+           top: 50%;
+           transform: translate(-50%, -50%);
+           width: 85%;
+           padding: 4vw;
+           background: rgba(255, 255, 255, 0.05);
+           border-radius: 15px;
+           backdrop-filter: blur(5px);
+           border: 1px solid rgba(45, 212, 191, 0.2);
+           opacity: 0;
+           box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+       }
 
-        .feature-item {
-            display: flex;
-            align-items: flex-start;
-            color: white;
-            font-size: 4vw;
-            margin-bottom: 3vh;
-            opacity: 0;
-            transform: translateX(-20px);
-            line-height: 1.4;
-            padding: 0 2vw;
-        }
+       .feature-icon {
+           font-size: 8vw;
+           margin-left: 4vw;
+           color: var(--primary);
+           filter: drop-shadow(0 0 10px rgba(45, 212, 191, 0.5));
+       }
 
-        .feature-item i {
-            color: var(--primary);
-            margin-left: 10px;
-            font-size: 5vw;
-            flex-shrink: 0;
-            margin-top: 3px;
-        }
+       .feature-text {
+           font-size: 4vw;
+           color: white;
+           line-height: 1.4;
+       }
 
-        /* Countdown */
-        .countdown {
-            font-size: 20vw;
-            color: var(--primary);
-            margin-top: auto;
-            opacity: 0;
-            font-weight: bold;
-            text-shadow: 0 0 20px rgba(45, 212, 191, 0.5);
-            margin-bottom: 5vh;
-        }
+       .countdown {
+           font-size: 15vw;
+           color: var(--primary);
+           margin-top: auto;
+           opacity: 0;
+           font-weight: bold;
+           text-shadow: 0 0 20px rgba(45, 212, 191, 0.5);
+       }
 
-        /* Video Aspect Ratio Fixes */
-        @media (min-aspect-ratio: 16/9) {
-            .video-wrapper iframe {
-                width: 100vw;
-                height: 56.25vw;
-            }
-        }
+       @media (min-aspect-ratio: 16/9) {
+           .video-wrapper iframe {
+               width: 100vw;
+               height: 56.25vw;
+           }
+       }
 
-        @media (max-aspect-ratio: 16/9) {
-            .video-wrapper iframe {
-                width: 177.78vh;
-                height: 100vh;
-            }
-        }
-
-        /* Responsive Adjustments */
-        @media (min-width: 768px) {
-            .feature-item {
-                font-size: 16px;
-            }
-            .feature-item i {
-                font-size: 20px;
-            }
-        }
-
-        /* iOS Height Fix */
-        @supports (-webkit-touch-callout: none) {
-            body {
-                height: -webkit-fill-available;
-            }
-        }
-    </style>
+       @media (max-aspect-ratio: 16/9) {
+           .video-wrapper iframe {
+               width: 177.78vh;
+               height: 100vh;
+           }
+       }
+   </style>
 </head>
 <body>
-    <!-- Video Background -->
-    <div class="video-wrapper">
-        <iframe
-            src="https://www.youtube.com/embed/Iaiu9ChqN9A?si=pdNOKc9nVzayYtjw&controls=0&autoplay=1&mute=1&loop=1&playlist=Iaiu9ChqN9A&modestbranding=1&showinfo=0&rel=0&iv_load_policy=3"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
-        </iframe>
-    </div>
-    
-    <!-- Dark Overlay -->
-    <div class="overlay"></div>
+   <div class="video-wrapper">
+       <iframe
+           src="https://www.youtube.com/embed/Iaiu9ChqN9A?si=pdNOKc9nVzayYtjw&controls=0&autoplay=1&mute=1&loop=1&playlist=Iaiu9ChqN9A&modestbranding=1&showinfo=0&rel=0&iv_load_policy=3"
+           frameborder="0"
+           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+           allowfullscreen>
+       </iframe>
+   </div>
+   
+   <div class="overlay"></div>
 
-    <!-- Main Content -->
-    <main class="content">
-        <!-- Logo -->
-        <div class="logo-container">
-            <img src="https://tracer.co.il/wp-content/uploads/elementor/thumbs/Logo-H-p8d906f0bmrgobnn9uwquzibery89mtbvr1plpc910.png" 
-                 alt="Tracer Logo" 
-                 class="logo">
-        </div>
-        
-        <!-- Title & Features -->
-        <h1 class="title">אופטימיזציית מסלולים חכמה</h1>
-        
-        <div class="description">
-            <p class="main-subtitle">המערכת המתקדמת שמביאה פתרונות מותאמים אישית לשליחים וטכנאים.</p>
-            
-            <ul class="features-list">
-                <li class="feature-item">
-                    <i class="fas fa-route"></i>
-                    סידור מסלולים אוטומטי, כולל התחשבות בזמני הגעה ללקוח ובפקקי תנועה
-                </li>
-                <li class="feature-item">
-                    <i class="fab fa-whatsapp"></i>
-                    שליחה לנקודות ישירות לנהגים באמצעות WhatsApp
-                </li>
-                <li class="feature-item">
-                    <i class="far fa-clock"></i>
-                    חיסכון בזמן לבעל העסק – סידור נקודות מהיר ויעיל
-                </li>
-                <li class="feature-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    חיסכון בזמן לשליח – נסיעות מתוכננות ואפקטיביות, בלי צורך להקליד את הכתובת בוויז
-                </li>
-                <li class="feature-item">
-                    <i class="fas fa-road"></i>
-                    חיסכון בקילומטרים – מסלולים קצרים, מדויקים וחכמים
-                </li>
-            </ul>
-        </div>
+   <main class="content">
+       <div class="logo-container">
+           <img src="https://tracer.co.il/wp-content/uploads/elementor/thumbs/Logo-H-p8d906f0bmrgobnn9uwquzibery89mtbvr1plpc910.png" 
+                alt="Tracer Logo" 
+                class="logo">
+       </div>
+       
+       <h1 class="title">אופטימיזציית מסלולים חכמה</h1>
+       <p class="main-subtitle">המערכת המתקדמת שמביאה פתרונות מותאמים אישית לשליחים וטכנאים.</p>
+       
+       <div class="features-container"></div>
+       
+       <div class="countdown">3</div>
+   </main>
 
-        <!-- Countdown -->
-        <div class="countdown">3</div>
-    </main>
+   <script>
+       // Mobile Height Fix
+       function setMobileHeight() {
+           let vh = window.innerHeight * 0.01;
+           document.documentElement.style.setProperty('--vh', `${vh}px`);
+       }
 
-    <script>
-        // Mobile Height Fix
-        function setMobileHeight() {
-            let vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
-        }
+       setMobileHeight();
+       window.addEventListener('resize', setMobileHeight);
+       window.addEventListener('orientationchange', setMobileHeight);
 
-        setMobileHeight();
-        window.addEventListener('resize', setMobileHeight);
-        window.addEventListener('orientationchange', setMobileHeight);
+       // Features Animation
+       const features = [
+           {
+               icon: 'fa-route',
+               text: 'סידור מסלולים אוטומטי, כולל התחשבות בזמני הגעה ללקוח ובפקקי תנועה'
+           },
+           {
+               icon: 'fa-whatsapp',
+               text: 'שליחה לנקודות ישירות לנהגים באמצעות WhatsApp'
+           },
+           {
+               icon: 'fa-clock',
+               text: 'חיסכון בזמן לבעל העסק – סידור נקודות מהיר ויעיל'
+           },
+           {
+               icon: 'fa-map-marker-alt',
+               text: 'חיסכון בזמן לשליח – נסיעות מתוכננות ואפקטיביות'
+           },
+           {
+               icon: 'fa-road',
+               text: 'חיסכון בקילומטרים – מסלולים קצרים, מדויקים וחכמים'
+           }
+       ];
 
-        // Animations
-        document.addEventListener('DOMContentLoaded', () => {
-            const tl = gsap.timeline();
+       let currentFeature = 0;
 
-            // Logo Animation
-            tl.fromTo('.logo-container', 
-                {
-                    opacity: 0,
-                    scale: 0,
-                    rotation: -720
-                },
-                {
-                    opacity: 1,
-                    scale: 1,
-                    duration: 1.5,
-                    rotation: 0,
-                    ease: "elastic.out(1, 0.3)"
-                }
-            )
-            // Title Animation
-            .to('.title', {
-                opacity: 1,
-                y: 0,
-                duration: 0.7
-            })
-            // Main Subtitle Animation
-            .to('.main-subtitle', {
-                opacity: 1,
-                y: 0,
-                duration: 0.7
-            })
-            // Features Animation
-            .to('.feature-item', {
-                opacity: 1,
-                x: 0,
-                duration: 0.5,
-                stagger: 0.2
-            })
-            // Countdown Animation
-            .to('.countdown', {
-                opacity: 1,
-                duration: 0.5,
-                onComplete: startCountdown
-            });
-        });
+       function showFeature(index) {
+           const feature = features[index];
+           const featureEl = document.createElement('div');
+           featureEl.className = 'feature-item';
+           featureEl.innerHTML = `
+               <i class="fas ${feature.icon} feature-icon"></i>
+               <div class="feature-text">${feature.text}</div>
+           `;
 
-        // Countdown Function
-        function startCountdown() {
-            const countdown = document.querySelector('.countdown');
-            let count = 3;
-            
-            const countdownInterval = setInterval(() => {
-                count--;
-                if (count > 0) {
-                    gsap.fromTo(countdown, 
-                        { 
-                            scale: 2, 
-                            opacity: 0 
-                        },
-                        { 
-                            scale: 1, 
-                            opacity: 1, 
-                            duration: 0.5,
-                            ease: "back.out(1.7)",
-                            onStart: () => countdown.textContent = count
-                        }
-                    );
-                } else {
-                    clearInterval(countdownInterval);
-                    gsap.to('.content', {
-                        opacity: 0,
-                        duration: 0.5,
-                        onComplete: () => {
-                            window.location.href = 'form.html';
-                        }
-                    });
-                }
-            }, 1000);
-        }
-    </script>
+           document.querySelector('.features-container').appendChild(featureEl);
+
+           gsap.fromTo(featureEl,
+               {
+                   opacity: 0,
+                   y: 50,
+                   scale: 0.8
+               },
+               {
+                   opacity: 1,
+                   y: 0,
+                   scale: 1,
+                   duration: 0.8,
+                   ease: "power2.out",
+                   onComplete: () => {
+                       setTimeout(() => {
+                           gsap.to(featureEl, {
+                               opacity: 0,
+                               y: -50,
+                               scale: 0.8,
+                               duration: 0.6,
+                               ease: "power2.in",
+                               onComplete: () => {
+                                   featureEl.remove();
+                                   currentFeature = (currentFeature + 1) % features.length;
+                                   if (currentFeature === 0) {
+                                       startCountdown();
+                                   } else {
+                                       showFeature(currentFeature);
+                                   }
+                               }
+                           });
+                       }, 3000);
+                   }
+               }
+           );
+       }
+
+       // Initial Animations
+       document.addEventListener('DOMContentLoaded', () => {
+           const tl = gsap.timeline();
+
+           tl.fromTo('.logo-container', 
+               {
+                   opacity: 0,
+                   scale: 0,
+                   rotation: -720
+               },
+               {
+                   opacity: 1,
+                   scale: 1,
+                   duration: 1.5,
+                   rotation: 0,
+                   ease: "elastic.out(1, 0.3)"
+               }
+           )
+           .to('.title', {
+               opacity: 1,
+               y: 0,
+               duration: 0.7
+           })
+           .to('.main-subtitle', {
+               opacity: 1,
+               y: 0,
+               duration: 0.7,
+               onComplete: () => showFeature(0)
+           });
+       });
+
+       // Countdown Animation
+       function startCountdown() {
+           gsap.to('.countdown', {
+               opacity: 1,
+               duration: 0.5
+           });
+
+           const countdown = document.querySelector('.countdown');
+           let count = 3;
+           
+           const countdownInterval = setInterval(() => {
+               count--;
+               if (count > 0) {
+                   gsap.fromTo(countdown, 
+                       { 
+                           scale: 2, 
+                           opacity: 0 
+                       },
+                       { 
+                           scale: 1, 
+                           opacity: 1, 
+                           duration: 0.5,
+                           ease: "back.out(1.7)",
+                           onStart: () => countdown.textContent = count
+                       }
+                   );
+               } else {
+                   clearInterval(countdownInterval);
+                   gsap.to('.content', {
+                       opacity: 0,
+                       duration: 0.5,
+                       onComplete: () => {
+                           window.location.href = 'form.html';
+                       }
+                   });
+               }
+           }, 1000);
+       }
+   </script>
 </body>
 </html>
