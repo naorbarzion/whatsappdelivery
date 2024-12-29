@@ -15,7 +15,6 @@
         :root {
             --primary: #2DD4BF;
             --dark: #1F2937;
-            --accent: #8B5CF6;
             --vh: 100%;
         }
 
@@ -31,7 +30,6 @@
             height: 100vh;
             height: calc(var(--vh, 1vh) * 100);
             overflow: hidden;
-            color: white;
             position: fixed;
             width: 100%;
         }
@@ -43,8 +41,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 10;
             padding: 1.5rem;
+            z-index: 10;
         }
 
         .intro-logo {
@@ -65,19 +63,13 @@
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
         }
 
-        .whatsapp-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            filter: drop-shadow(0 0 10px rgba(45, 212, 191, 0.5));
-        }
-
         .form-container {
             position: fixed;
             inset: 0;
+            padding: 1rem;
             display: none;
             opacity: 0;
-            padding: 1rem;
+            color: white;
         }
 
         .form-logo {
@@ -101,52 +93,36 @@
         .fields-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 0.6rem;
-            margin-top: 0.5rem;
-            height: calc(100% - 80px);
+            gap: 0.8rem;
+            margin-top: 1rem;
         }
 
         .field-full {
-            grid-column: 1 / -1;
+            grid-column: span 2;
         }
 
         .input-group {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
-            padding: 0.6rem;
+            padding: 0.8rem;
             border: 1px solid rgba(45, 212, 191, 0.2);
             opacity: 0;
         }
 
         .input-label {
             color: var(--primary);
-            font-size: 0.85rem;
-            margin-bottom: 0.2rem;
-            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
         }
 
         .input-field {
             width: 100%;
-            padding: 0.5rem;
+            padding: 0.6rem;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(45, 212, 191, 0.3);
             border-radius: 8px;
             color: white;
-            font-size: 0.9rem;
-        }
-
-        @media (max-height: 700px) {
-            .input-group {
-                padding: 0.4rem;
-            }
-            
-            .input-field {
-                padding: 0.4rem;
-            }
-            
-            .form-logo {
-                width: 100px;
-            }
+            font-size: 0.95rem;
         }
     </style>
 </head>
@@ -158,7 +134,7 @@
              class="intro-logo">
         
         <div class="intro-box">
-            <i class="fab fa-whatsapp whatsapp-icon"></i>
+            <i class="fab fa-whatsapp text-4xl text-primary mb-4"></i>
             <p class="text-lg leading-relaxed">
                 בעל העסק מזין את הנקודות במערכת,<br>
                 המערכת מייעלת את המסלולים ושולחת<br>
@@ -169,7 +145,7 @@
 
     <!-- Form Screen -->
     <div class="form-container">
-        <div class="order-counter">הזמנה 1 מתוך 10</div>
+        <div class="order-counter">הזמנה 1 מתוך 5</div>
         
         <img src="https://tracer.co.il/wp-content/uploads/elementor/thumbs/Logo-H-p8d906f0bmrgobnn9uwquzibery89mtbvr1plpc910.png" 
              alt="Tracer Logo" 
@@ -177,12 +153,7 @@
 
         <div class="fields-grid">
             <div class="input-group">
-                <div class="input-label">שם פרטי</div>
-                <input type="text" class="input-field" readonly>
-            </div>
-
-            <div class="input-group">
-                <div class="input-label">שם משפחה</div>
+                <div class="input-label">שם מלא</div>
                 <input type="text" class="input-field" readonly>
             </div>
 
@@ -197,12 +168,7 @@
             </div>
 
             <div class="input-group">
-                <div class="input-label">תאריך</div>
-                <input type="text" class="input-field" readonly>
-            </div>
-
-            <div class="input-group">
-                <div class="input-label">שעת הגעה</div>
+                <div class="input-label">תאריך ושעת הגעה</div>
                 <input type="text" class="input-field" readonly>
             </div>
 
@@ -213,6 +179,11 @@
 
             <div class="input-group">
                 <div class="input-label">הערות</div>
+                <input type="text" class="input-field" readonly>
+            </div>
+
+            <div class="input-group">
+                <div class="input-label">התניות מיוחדות</div>
                 <input type="text" class="input-field" readonly>
             </div>
 
@@ -239,8 +210,7 @@
     
         // נתוני דוגמה
         const mockData = {
-            firstNames: ['רונית', 'דני', 'מיכל', 'אבי', 'שירה', 'יעל', 'עידן', 'נועה'],
-            lastNames: ['שמש', 'לוי', 'כהן', 'ישראלי', 'דוד', 'אברהם', 'פרץ'],
+            fullNames: ['רונית שמש', 'דני לוי', 'מיכל כהן', 'אבי ישראלי', 'שירה דוד'],
             phones: ['050-1234567', '052-7654321', '054-9876543', '053-1472583', '058-3697412'],
             addresses: [
                 'הברזל 30 תל אביב',
@@ -249,10 +219,11 @@
                 'סוקולוב 55 הרצליה',
                 'רוטשילד 123 ראשון לציון'
             ],
-            tasks: ['משלוח קל', 'משלוח בינוני', 'משלוח כבד', 'איסוף דחוף'],
+            dateTimes: ['29/12/2024 09:00', '29/12/2024 10:30', '29/12/2024 12:00', '29/12/2024 13:30', '29/12/2024 15:00'],
+            tasks: ['משלוח קל', 'משלוח בינוני', 'משלוח כבד', 'איסוף דחוף', 'משלוח קל'],
             notes: ['להתקשר לפני הגעה', 'יש מעלית', 'קומה 3', 'חניה בחינם', 'לתאם טלפונית'],
-            warehouses: ['מחסן מרכזי - תל אביב', 'מחסן צפון - הרצליה', 'מחסן דרום - ראשל"צ'],
-            times: ['09:00', '10:30', '12:00', '13:30', '15:00', '16:30']
+            specialConditions: ['דחוף', 'שביר', 'תשלום במזומן', 'להשאיר בדלת', 'צריך חתימה'],
+            warehouses: ['מחסן מרכזי - תל אביב', 'מחסן צפון - הרצליה', 'מחסן דרום - ראשל"צ']
         };
     
         // אנימציית הקלדה
@@ -264,68 +235,50 @@
             }
         }
     
-        // אנימציית טופס
+        // מילוי טופס
         async function fillForm(orderNum) {
-            document.querySelector('.order-counter').textContent = `הזמנה ${orderNum} מתוך 10`;
+            document.querySelector('.order-counter').textContent = `הזמנה ${orderNum} מתוך 5`;
     
             gsap.to('.input-group', {
                 opacity: 1,
-                duration: 0.1,
-                stagger: 0.03
+                duration: 0.2,
+                stagger: 0.05
             });
     
             const fields = document.querySelectorAll('.input-field');
-            
-            if (orderNum === 1) {
-                // הזמנה ראשונה - הקלדה איטית לשתי נקודות ראשונות
-                await typeText(fields[0], 'רונית', 100);      // שם פרטי - איטי
-                await typeText(fields[1], 'שמש', 100);       // שם משפחה - איטי
-                await typeText(fields[2], '050-1234567', 20); 
-                await typeText(fields[3], 'הברזל 30 תל אביב', 20);
-                await typeText(fields[4], '29/12/2024', 20);
-                await typeText(fields[5], '09:00', 20);
-                await typeText(fields[6], 'משלוח בינוני', 20);
-                await typeText(fields[7], 'להתקשר לפני הגעה', 20);
-                await typeText(fields[8], 'מחסן מרכזי - תל אביב', 20);
-                await typeText(fields[9], 'מחסן דרום - ראשל"צ', 20);
-            } else {
-                // שאר ההזמנות - מילוי מקבילי מהיר
-                const data = {
-                    firstName: mockData.firstNames[Math.floor(Math.random() * mockData.firstNames.length)],
-                    lastName: mockData.lastNames[Math.floor(Math.random() * mockData.lastNames.length)],
-                    phone: mockData.phones[Math.floor(Math.random() * mockData.phones.length)],
-                    address: mockData.addresses[Math.floor(Math.random() * mockData.addresses.length)],
-                    date: '29/12/2024',
-                    time: mockData.times[Math.floor(Math.random() * mockData.times.length)],
-                    task: mockData.tasks[Math.floor(Math.random() * mockData.tasks.length)],
-                    note: mockData.notes[Math.floor(Math.random() * mockData.notes.length)],
-                    startPoint: mockData.warehouses[Math.floor(Math.random() * mockData.warehouses.length)],
-                    endPoint: mockData.warehouses[Math.floor(Math.random() * mockData.warehouses.length)]
-                };
+            const typingSpeed = orderNum <= 2 ? 50 : 20;
+            const delayBetweenFields = orderNum <= 2 ? 100 : 50;
     
-                await Promise.all([
-                    typeText(fields[0], data.firstName, 10),
-                    typeText(fields[1], data.lastName, 10),
-                    typeText(fields[2], data.phone, 10),
-                    typeText(fields[3], data.address, 10),
-                    typeText(fields[4], data.date, 10),
-                    typeText(fields[5], data.time, 10),
-                    typeText(fields[6], data.task, 10),
-                    typeText(fields[7], data.note, 10),
-                    typeText(fields[8], data.startPoint, 10),
-                    typeText(fields[9], data.endPoint, 10)
-                ]);
+            const data = {
+                fullName: mockData.fullNames[orderNum - 1],
+                phone: mockData.phones[orderNum - 1],
+                address: mockData.addresses[orderNum - 1],
+                dateTime: mockData.dateTimes[orderNum - 1],
+                task: mockData.tasks[orderNum - 1],
+                note: mockData.notes[orderNum - 1],
+                specialCondition: mockData.specialConditions[orderNum - 1],
+                startPoint: mockData.warehouses[0],
+                endPoint: mockData.warehouses[1]
+            };
+    
+            // מילוי שדות
+            for (let i = 0; i < fields.length; i++) {
+                const value = Object.values(data)[i];
+                await typeText(fields[i], value, typingSpeed);
+                await new Promise(resolve => setTimeout(resolve, delayBetweenFields));
             }
     
+            // המתנה קצרה בסוף
+            await new Promise(resolve => setTimeout(resolve, 150));
+    
+            // ניקוי טופס
             return new Promise(resolve => {
-                setTimeout(() => {
-                    gsap.to('.input-group', {
-                        opacity: 0,
-                        duration: 0.1,
-                        stagger: 0.02,
-                        onComplete: resolve
-                    });
-                }, 50);
+                gsap.to('.input-group', {
+                    opacity: 0,
+                    duration: 0.2,
+                    stagger: 0.03,
+                    onComplete: resolve
+                });
             });
         }
     
@@ -359,9 +312,13 @@
                         x: 0,
                         duration: 0.2,
                         onComplete: async () => {
-                            for (let i = 1; i <= 10; i++) {
+                            // הרצת 5 הזמנות
+                            for (let i = 1; i <= 5; i++) {
                                 await fillForm(i);
-                                if (i === 10) {
+                                // המתנה קצרה בין הזמנות
+                                if (i < 5) {
+                                    await new Promise(resolve => setTimeout(resolve, 100));
+                                } else {
                                     gsap.to('.form-container', {
                                         opacity: 0,
                                         duration: 0.3,
