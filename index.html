@@ -4,76 +4,148 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tracer - מערכת ניהול מסלולים</title>
-    
-    <!-- Core Libraries -->
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.6.2/fuse.min.js"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#2DD4BF',
-                        secondary: '#A78BFA'
-                    }
-                },
-                fontFamily: {
-                    'rubik': ['Rubik', 'sans-serif']
-                }
-            }
-        }
-    </script>
-
     <style>
-        @layer base {
-            html {
-                height: -webkit-fill-available;
-            }
-            body {
-                min-height: -webkit-fill-available;
-            }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rubik', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .safe-area {
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
+        :root {
+            --app-height: 100%;
+        }
+
+        body {
+            width: 100%;
+            height: var(--app-height);
+            overflow: hidden;
+            background: #1F2937;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(31, 41, 55, 0.8);
+            z-index: 2;
+        }
+
+        iframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100vh; /* זה יבטיח שהוידאו תמיד ימלא את גובה המסך */
+            height: 100vh;
+            pointer-events: none;
+        }
+
+        .content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 5vw;
+        }
+
+        .logo-container {
+            width: 70vw; /* רוחב יחסי למסך */
+            max-width: 250px;
+            margin-bottom: 5vh;
+            opacity: 0;
+        }
+
+        .logo {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 0 10px rgba(45, 212, 191, 0.3));
+        }
+
+        .title {
+            color: #fff;
+            font-size: 6vw; /* גודל טקסט יחסי לרוחב המסך */
+            margin-bottom: 2vh;
+            text-align: center;
+            opacity: 0;
+        }
+
+        .subtitle {
+            color: #2DD4BF;
+            font-size: 4vw;
+            margin-bottom: 5vh;
+            text-align: center;
+            opacity: 0;
+        }
+
+        .countdown {
+            font-size: 20vw;
+            font-weight: bold;
+            color: #2DD4BF;
+            opacity: 0;
+            text-shadow: 0 0 20px rgba(45, 212, 191, 0.5);
+            position: relative;
+            width: 100%;
+            text-align: center;
+            margin-top: auto;
+            padding-bottom: 10vh;
         }
     </style>
 </head>
-<body class="bg-gray-900 font-rubik overflow-hidden h-screen">
-    <!-- וידאו רקע -->
-    <div class="fixed inset-0 z-0">
-        <div class="absolute inset-0 bg-gray-900/80 z-10"></div>
-        <div id="player" class="w-full h-full"></div>
+<body>
+    <div class="video-container">
+        <div class="video-overlay"></div>
+        <div id="player"></div>
     </div>
 
-    <!-- תוכן ראשי -->
-    <main class="relative z-20 h-screen w-screen flex flex-col items-center justify-center px-6 safe-area">
-        <!-- לוגו -->
-        <div class="w-4/5 max-w-[250px] mb-8 opacity-0" id="logo-container">
+    <main class="content">
+        <div class="logo-container">
             <img src="https://tracer.co.il/wp-content/uploads/elementor/thumbs/Logo-H-p8d906f0bmrgobnn9uwquzibery89mtbvr1plpc910.png" 
                  alt="Tracer Logo" 
-                 class="w-full h-auto"
-                 id="logo">
+                 class="logo">
         </div>
-
-        <!-- כותרות -->
-        <h1 class="text-white text-2xl md:text-3xl text-center mb-4 opacity-0" id="title">
-            אופטימיזציית מסלולים חכמה
-        </h1>
-        <p class="text-primary text-lg md:text-xl text-center mb-12 opacity-0" id="subtitle">
-            המערכת המתקדמת לניהול משימות
-        </p>
-
-        <!-- ספירה לאחור -->
-        <div class="text-primary text-8xl font-bold opacity-0 mt-auto mb-24" id="countdown">3</div>
+        <h1 class="title">אופטימיזציית מסלולים חכמה</h1>
+        <p class="subtitle">המערכת המתקדמת לניהול משימות</p>
+        <div class="countdown">3</div>
     </main>
 
     <script>
+        // תיקון גובה עבור מובייל
+        function setMobileHeight() {
+            const vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+        }
+        
+        window.addEventListener('resize', setMobileHeight);
+        window.addEventListener('orientationchange', setMobileHeight);
+        setMobileHeight();
+
         // YouTube API
         function loadYouTubeAPI() {
             const tag = document.createElement('script');
@@ -100,17 +172,12 @@
                     rel: 0,
                     showinfo: 0,
                     mute: 1,
-                    playlist: 'Iaiu9ChqN9A',
-                    origin: window.location.origin
+                    playlist: 'Iaiu9ChqN9A'
                 },
                 events: {
                     onReady: (e) => {
                         e.target.playVideo();
                         startAnimations();
-                    },
-                    onError: (e) => {
-                        console.error('YouTube Error:', e);
-                        document.querySelector('.fixed').style.backgroundColor = '#1F2937';
                     }
                 }
             });
@@ -119,7 +186,7 @@
         function startAnimations() {
             const tl = gsap.timeline();
 
-            tl.fromTo('#logo-container', 
+            tl.fromTo('.logo-container', 
                 {
                     opacity: 0,
                     scale: 0,
@@ -133,17 +200,17 @@
                     ease: "elastic.out(1, 0.3)"
                 }
             )
-            .to('#title', {
+            .to('.title', {
                 opacity: 1,
                 y: 0,
                 duration: 0.5
             })
-            .to('#subtitle', {
+            .to('.subtitle', {
                 opacity: 1,
                 y: 0,
                 duration: 0.5
             })
-            .to('#countdown', {
+            .to('.countdown', {
                 opacity: 1,
                 duration: 0.5,
                 onComplete: startCountdown
@@ -151,7 +218,7 @@
         }
 
         function startCountdown() {
-            const countdown = document.querySelector('#countdown');
+            const countdown = document.querySelector('.countdown');
             let count = 3;
             
             const countdownInterval = setInterval(() => {
@@ -172,7 +239,7 @@
                     );
                 } else {
                     clearInterval(countdownInterval);
-                    gsap.to('main', {
+                    gsap.to('.content', {
                         opacity: 0,
                         duration: 0.5,
                         onComplete: () => {
@@ -182,15 +249,6 @@
                 }
             }, 1000);
         }
-
-        // תיקון גובה למובייל
-        function setMobileHeight() {
-            document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
-        }
-
-        window.addEventListener('resize', setMobileHeight);
-        window.addEventListener('orientationchange', setMobileHeight);
-        setMobileHeight();
     </script>
 </body>
 </html>
