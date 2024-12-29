@@ -2,82 +2,85 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>הזנת נקודות - Tracer</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tracer - הזנת נקודות</title>
+
     <!-- Core Libraries -->
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    
+
     <style>
         :root {
             --primary: #2DD4BF;
             --dark: #1F2937;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Rubik', sans-serif;
+            --accent: #F59E0B;
+            --vh: 100%;
         }
 
         body {
+            font-family: 'Rubik', sans-serif;
             background: var(--dark);
-            min-height: 100vh;
             color: white;
-            padding: 4vw;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .logo-container {
-            width: 50%;
-            max-width: 150px;
-            margin: 2vh auto;
+            margin-bottom: 1rem;
         }
 
         .logo {
-            width: 100%;
-            height: auto;
+            width: 200px;
             filter: drop-shadow(0 0 10px rgba(45, 212, 191, 0.3));
         }
 
-        .form-container {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 4vw;
-            margin-top: 2vh;
-            border: 1px solid rgba(45, 212, 191, 0.2);
-            backdrop-filter: blur(10px);
+        .message-container {
+            text-align: center;
+            margin-bottom: 1.5rem;
         }
 
-        .order-counter {
-            position: fixed;
-            top: 2vh;
-            left: 4vw;
-            background: var(--primary);
-            color: var(--dark);
-            padding: 1vh 3vw;
-            border-radius: 20px;
-            font-weight: 500;
-            font-size: 0.9rem;
+        .message-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .message-text {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .form-container {
+            width: 90%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
 
         .input-group {
-            margin-bottom: 3vh;
+            margin-bottom: 1rem;
         }
 
         .input-label {
             color: var(--primary);
             font-size: 0.9rem;
-            margin-bottom: 1vh;
-            display: block;
+            margin-bottom: 0.3rem;
+            text-align: right;
         }
 
         .input-field {
             width: 100%;
-            padding: 2vh 3vw;
+            padding: 0.6rem;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(45, 212, 191, 0.3);
             border-radius: 8px;
@@ -85,173 +88,142 @@
             font-size: 1rem;
         }
 
-        .input-field::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .typing-animation {
-            position: relative;
-        }
-
-        .typing-animation::after {
-            content: '|';
-            position: absolute;
-            right: 0;
-            top: 0;
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+        .order-counter {
+            background: var(--primary);
+            color: var(--dark);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 1rem;
         }
     </style>
 </head>
 <body>
-    <div class="order-counter">הזמנה 1 מתוך 20</div>
-
+    <!-- Logo -->
     <div class="logo-container">
-        <img src="https://tracer.co.il/wp-content/uploads/elementor/thumbs/Logo-H-p8d906f0bmrgobnn9uwquzibery89mtbvr1plpc910.png" 
-             alt="Tracer Logo" 
-             class="logo">
+        <img src="https://tracer.co.il/wp-content/uploads/elementor/thumbs/Logo-H-p8d906f0bmrgobnn9uwquzibery89mtbvr1plpc910.png" alt="Tracer Logo" class="logo">
     </div>
 
+    <!-- Initial Message -->
+    <div class="message-container">
+        <i class="fab fa-whatsapp message-icon"></i>
+        <p class="message-text">בעל העסק מזין את הנקודות במערכת,<br>
+            המערכת מייעלת את המסלולים ושולחת<br>
+            הודעה אישית מותאמת בוואטסאפ לכל שליח</p>
+    </div>
+
+    <!-- Form -->
     <div class="form-container">
+        <div class="order-counter">הזמנה 1 מתוך 20</div>
+
         <div class="input-group">
-            <label class="input-label">שם פרטי</label>
-            <input type="text" class="input-field" readonly>
+            <label for="first-name" class="input-label">שם פרטי</label>
+            <input type="text" id="first-name" class="input-field" readonly>
         </div>
+
         <div class="input-group">
-            <label class="input-label">שם משפחה</label>
-            <input type="text" class="input-field" readonly>
+            <label for="last-name" class="input-label">שם משפחה</label>
+            <input type="text" id="last-name" class="input-field" readonly>
         </div>
+
         <div class="input-group">
-            <label class="input-label">טלפון</label>
-            <input type="tel" class="input-field" readonly>
+            <label for="phone" class="input-label">טלפון</label>
+            <input type="text" id="phone" class="input-field" readonly>
         </div>
+
         <div class="input-group">
-            <label class="input-label">כתובת מלאה</label>
-            <input type="text" class="input-field" readonly>
+            <label for="full-address" class="input-label">כתובת מלאה</label>
+            <input type="text" id="full-address" class="input-field" readonly>
         </div>
+
         <div class="input-group">
-            <label class="input-label">משימה</label>
-            <input type="text" class="input-field" readonly>
+            <label for="task" class="input-label">משימה</label>
+            <input type="text" id="task" class="input-field" readonly>
         </div>
+
         <div class="input-group">
-            <label class="input-label">הערות</label>
-            <input type="text" class="input-field" readonly>
+            <label for="notes" class="input-label">הערות</label>
+            <input type="text" id="notes" class="input-field" readonly>
         </div>
+
         <div class="input-group">
-            <label class="input-label">תאריך</label>
-            <input type="date" class="input-field" readonly>
+            <label for="date-time" class="input-label">שעת ותאריך יעד</label>
+            <input type="datetime-local" id="date-time" class="input-field" readonly>
         </div>
+
         <div class="input-group">
-            <label class="input-label">שעת הגעה</label>
-            <input type="time" class="input-field" readonly>
+            <label for="special-settings" class="input-label">הגדרות מיוחדות</label>
+            <input type="text" id="special-settings" class="input-field" readonly>
         </div>
+
         <div class="input-group">
-            <label class="input-label">נקודת יציאה/מחסן</label>
-            <input type="text" class="input-field" readonly>
+            <label for="start-point" class="input-label">נקודת יציאה/מחסן</label>
+            <input type="text" id="start-point" class="input-field" readonly>
         </div>
+
         <div class="input-group">
-            <label class="input-label">נקודת סיום</label>
-            <input type="text" class="input-field" readonly>
+            <label for="end-point" class="input-label">נקודת סיום</label>
+            <input type="text" id="end-point" class="input-field" readonly>
         </div>
     </div>
 
     <script>
-        const mockData = [
-            {
-                firstName: 'רונית',
-                lastName: 'כהן',
-                phone: '050-1234567',
-                address: 'הברזל 30, תל אביב',
-                task: 'משלוח בינוני',
-                notes: 'להתקשר לפני הגעה',
-                date: '2025-01-01',
-                time: '09:30',
-                startPoint: 'מחסן מרכזי',
-                endPoint: 'סניף צפון'
-            },
-            // נוסיף עוד 19 נקודות בהמשך
-        ];
-
-        const streets = ['הברזל', 'דיזנגוף', 'אלנבי', 'בן יהודה', 'המסגר', 'רוטשילד', 'ארלוזורוב'];
-        const cities = ['תל אביב', 'רמת גן', 'גבעתיים', 'הרצליה', 'חולון', 'פתח תקווה'];
-        const tasks = ['משלוח קטן', 'משלוח בינוני', 'משלוח גדול', 'איסוף דחוף', 'החלפת מוצר'];
-        const warehouses = ['מחסן מרכזי', 'מחסן צפון', 'מחסן דרום', 'מרכז לוגיסטי'];
-        const firstNames = ['רונית', 'דני', 'מיכל', 'יוסי', 'שירה', 'אבי', 'לימור', 'עידן'];
-        const lastNames = ['כהן', 'לוי', 'מזרחי', 'אברהם', 'דוד', 'חיים', 'פרץ'];
-
-        function generateRandomOrder() {
-            return {
-                firstName: firstNames[Math.floor(Math.random() * firstNames.length)],
-                lastName: lastNames[Math.floor(Math.random() * lastNames.length)],
-                phone: `05${Math.floor(Math.random() * 10)}-${Math.floor(Math.random() * 10000000)}`,
-                address: `${streets[Math.floor(Math.random() * streets.length)]} ${Math.floor(Math.random() * 100)}, ${cities[Math.floor(Math.random() * cities.length)]}`,
-                task: tasks[Math.floor(Math.random() * tasks.length)],
-                notes: 'להתקשר לפני הגעה',
-                date: '2025-01-01',
-                time: `${String(Math.floor(Math.random() * 12 + 8)).padStart(2, '0')}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}`,
-                startPoint: warehouses[Math.floor(Math.random() * warehouses.length)],
-                endPoint: warehouses[Math.floor(Math.random() * warehouses.length)]
-            };
+        function setMobileHeight() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
         }
+        setMobileHeight();
+        window.addEventListener('resize', setMobileHeight);
 
-        async function typeText(element, text, duration = 1) {
+        async function typeText(element, text) {
             element.value = '';
-            const chars = text.split('');
-            for (let char of chars) {
+            for (let char of text) {
                 element.value += char;
-                await new Promise(resolve => setTimeout(resolve, duration * 1000 / chars.length));
+                await new Promise(resolve => setTimeout(resolve, 50));
             }
         }
 
-        async function fillForm(data, orderNumber) {
-            document.querySelector('.order-counter').textContent = `הזמנה ${orderNumber} מתוך 20`;
-            const inputs = document.querySelectorAll('.input-field');
-            
-            const values = [
-                data.firstName,
-                data.lastName,
-                data.phone,
-                data.address,
-                data.task,
-                data.notes,
-                data.date,
-                data.time,
-                data.startPoint,
-                data.endPoint
-            ];
+        async function fillForm(orderNum) {
+            document.querySelector('.order-counter').textContent = `הזמנה ${orderNum} מתוך 20`;
 
-            for (let i = 0; i < inputs.length; i++) {
-                await typeText(inputs[i], values[i], 0.5);
-            }
+            const mockData = {
+                firstName: ['רונית', 'דני', 'מיכל'][Math.floor(Math.random() * 3)],
+                lastName: ['שמש', 'לוי', 'כהן'][Math.floor(Math.random() * 3)],
+                phone: ['0501234567', '0529876543', '0547654321'][Math.floor(Math.random() * 3)],
+                address: ['הברזל 30 תל אביב', 'דיזנגוף 99 תל אביב', 'ביאליק 15 רמת גן'][Math.floor(Math.random() * 3)],
+                task: ['משלוח קל', 'משלוח בינוני', 'משלוח כבד'][Math.floor(Math.random() * 3)],
+                notes: ['בדוק מראש', 'הביאו מסמכים', 'נא להקפיד על לו"ז'][Math.floor(Math.random() * 3)],
+                dateTime: new Date().toISOString().slice(0, 16),
+                specialSettings: ['קירור', 'שירות מהיר', 'אחסון זמני'][Math.floor(Math.random() * 3)],
+                startPoint: ['מחסן מרכזי', 'מחסן צפוני', 'מחסן דרומי'][Math.floor(Math.random() * 3)],
+                endPoint: ['תחנה מרכזית', 'נמל חיפה', 'שדה תעופה'][Math.floor(Math.random() * 3)]
+            };
 
-            return new Promise(resolve => setTimeout(resolve, 500));
+            await typeText(document.getElementById('first-name'), mockData.firstName);
+            await typeText(document.getElementById('last-name'), mockData.lastName);
+            await typeText(document.getElementById('phone'), mockData.phone);
+            await typeText(document.getElementById('full-address'), mockData.address);
+            await typeText(document.getElementById('task'), mockData.task);
+            await typeText(document.getElementById('notes'), mockData.notes);
+            document.getElementById('date-time').value = mockData.dateTime;
+            await typeText(document.getElementById('special-settings'), mockData.specialSettings);
+            await typeText(document.getElementById('start-point'), mockData.startPoint);
+            await typeText(document.getElementById('end-point'), mockData.endPoint);
         }
 
-        async function startDemo() {
+        document.addEventListener('DOMContentLoaded', async () => {
+            const formContainer = document.querySelector('.form-container');
+            gsap.from(formContainer, { opacity: 0, duration: 1 });
+
             for (let i = 1; i <= 20; i++) {
-                const orderData = generateRandomOrder();
-                await fillForm(orderData, i);
-                
-                if (i < 20) {
-                    // מחיקת הנתונים לפני ההזמנה הבאה
-                    const inputs = document.querySelectorAll('.input-field');
-                    inputs.forEach(input => input.value = '');
-                    await new Promise(resolve => setTimeout(resolve, 300));
-                } else {
-                    // סיום ומעבר לדף הבא
-                    setTimeout(() => {
-                        window.location.href = 'next-page.html';
-                    }, 1000);
-                }
+                await fillForm(i);
+                await new Promise(resolve => setTimeout(resolve, 500));
             }
-        }
 
-        // התחלת ההדמיה כשהדף נטען
-        window.addEventListener('load', startDemo);
+            window.location.href = 'optimization.html';
+        });
     </script>
 </body>
 </html>
