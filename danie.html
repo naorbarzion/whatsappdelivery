@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+   <title>Tracer - אופטימיזציית מסלולים חכמה</title>
+   
+   <!-- Core Libraries -->
+   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+   <script src="https://cdn.tailwindcss.com"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+   
+   <style>
+       :root {
+           --vh: 100%;
+           --primary: #49A1E7;
+           --secondary: #A78BFA;
+           --dark: #1F2937;
+       }
+
+       * {
+           margin: 0;
+           padding: 0;
+           box-sizing: border-box;
+           -webkit-tap-highlight-color: transparent;
+           font-family: 'Rubik', sans-serif;
+       }
+
+       body {
+           width: 100vw;
+           height: 100vh;
+           height: calc(var(--vh, 1vh) * 100);
+           overflow: hidden;
+           background: var(--dark);
+       }
+
+       .video-wrapper {
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           z-index: 1;
+       }
+
+       .video-wrapper iframe {
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           transform: translate(-50%, -50%);
+           width: 100vw;
+           height: 100vh;
+           pointer-events: none;
+           opacity: 0.6;
+           filter: grayscale(0.2) brightness(0.8);
+       }
+
+       .overlay {
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           background: rgba(17, 24, 39, 0.85);
+           z-index: 2;
+       }
+
+       .content {
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           z-index: 3;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           padding: 5vh 5vw;
+           overflow: hidden;
+       }
+
+       .logo-container {
+           width: 60%;
+           max-width: 200px;
+           margin-bottom: 4vh;
+           opacity: 0;
+       }
+
+       .logo {
+           width: 100%;
+           height: auto;
+           filter: drop-shadow(0 0 15px rgba(45, 212, 191, 0.4));
+       }
+
+       .title {
+           font-size: 6vw;
+           color: white;
+           text-align: center;
+           margin-bottom: 2vh;
+           opacity: 0;
+           font-weight: bold;
+       }
+
+       .main-subtitle {
+           color: var(--primary);
+           font-size: 4vw;
+           text-align: center;
+           margin-bottom: 4vh;
+           opacity: 0;
+           width: 90%;
+       }
+
+       .features-container {
+           position: relative;
+           width: 100%;
+           height: 40vh;
+           margin: 2vh 0;
+       }
+
+       .feature-item {
+           display: flex;
+           align-items: center;
+           justify-content: flex-start;
+           position: absolute;
+           left: 50%;
+           top: 50%;
+           transform: translate(-50%, -50%);
+           width: 85%;
+           padding: 4vw;
+           background: rgba(255, 255, 255, 0.05);
+           border-radius: 15px;
+           backdrop-filter: blur(5px);
+           border: 1px solid rgba(45, 212, 191, 0.2);
+           opacity: 0;
+           box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+       }
+
+       .feature-icon {
+           font-size: 8vw;
+           margin-left: 4vw;
+           color: var(--primary);
+           filter: drop-shadow(0 0 10px rgba(45, 212, 191, 0.5));
+       }
+
+       .feature-text {
+           font-size: 4vw;
+           color: white;
+           line-height: 1.4;
+       }
+
+       .countdown {
+           font-size: 15vw;
+           color: var(--primary);
+           margin-top: auto;
+           opacity: 0;
+           font-weight: bold;
+           text-shadow: 0 0 20px rgba(45, 212, 191, 0.5);
+       }
+
+       @media (min-aspect-ratio: 16/9) {
+           .video-wrapper iframe {
+               width: 100vw;
+               height: 56.25vw;
+           }
+       }
+
+       @media (max-aspect-ratio: 16/9) {
+           .video-wrapper iframe {
+               width: 177.78vh;
+               height: 100vh;
+           }
+       }
+   </style>
+</head>
+<body>
+   <div class="video-wrapper">
+       <iframe
+           src="https://www.youtube.com/embed/Iaiu9ChqN9A?si=pdNOKc9nVzayYtjw&controls=0&autoplay=1&mute=1&loop=1&playlist=Iaiu9ChqN9A&modestbranding=1&showinfo=0&rel=0&iv_load_policy=3"
+           frameborder="0"
+           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+           allowfullscreen>
+       </iframe>
+   </div>
+   
+   <div class="overlay"></div>
+
+   <main class="content">
+       <div class="logo-container">
+           <img src="https://tracer.co.il/wp-content/uploads/2024/12/logo-H-White.png" 
+                alt="Tracer Logo" 
+                class="logo">
+       </div>
+       
+       <h1 class="title">אופטימיזציית מסלולים חכמה</h1>
+       <p class="main-subtitle">המערכת המתקדמת שמביאה פתרונות מותאמים אישית לשליחים וטכנאים.</p>
+       
+       <div class="features-container"></div>
+       
+       <div class="countdown">3</div>
+   </main>
+
+   <script>
+       // Mobile Height Fix
+       function setMobileHeight() {
+           let vh = window.innerHeight * 0.01;
+           document.documentElement.style.setProperty('--vh', `${vh}px`);
+       }
+
+       setMobileHeight();
+       window.addEventListener('resize', setMobileHeight);
+       window.addEventListener('orientationchange', setMobileHeight);
+
+       // Features Animation
+       const features = [
+           {
+               icon: 'fa-route',
+               text: 'סידור מסלולים אוטומטי, כולל התחשבות בזמני הגעה ללקוח ובפקקי תנועה'
+           },
+           {
+               icon: 'fab fa-whatsapp', // השינוי פה - הוספנו fab במקום fas
+               text: 'שליחה לנקודות ישירות לנהגים באמצעות WhatsApp'
+           },
+           {
+               icon: 'fa-clock',
+               text: 'חיסכון בזמן לבעל העסק – סידור נקודות מהיר ויעיל'
+           },
+           {
+               icon: 'fa-map-marker-alt',
+               text: 'חיסכון בזמן לשליח – נסיעות מתוכננות ואפקטיביות'
+           },
+           {
+               icon: 'fa-road',
+               text: 'חיסכון בקילומטרים – מסלולים קצרים, מדויקים וחכמים'
+           }
+       ];
+
+       let currentFeature = 0;
+
+       function showFeature(index) {
+           const feature = features[index];
+           const featureEl = document.createElement('div');
+           featureEl.className = 'feature-item';
+           featureEl.innerHTML = `
+               <i class="fas ${feature.icon} feature-icon"></i>
+               <div class="feature-text">${feature.text}</div>
+           `;
+
+           document.querySelector('.features-container').appendChild(featureEl);
+
+           gsap.fromTo(featureEl,
+               {
+                   opacity: 0,
+                   y: 50,
+                   scale: 0.8
+               },
+               {
+                   opacity: 1,
+                   y: 0,
+                   scale: 1,
+                   duration: 0.8,
+                   ease: "power2.out",
+                   onComplete: () => {
+                       setTimeout(() => {
+                           gsap.to(featureEl, {
+                               opacity: 0,
+                               y: -50,
+                               scale: 0.8,
+                               duration: 0.6,
+                               ease: "power2.in",
+                               onComplete: () => {
+                                   featureEl.remove();
+                                   currentFeature = (currentFeature + 1) % features.length;
+                                   if (currentFeature === 0) {
+                                       startCountdown();
+                                   } else {
+                                       showFeature(currentFeature);
+                                   }
+                               }
+                           });
+                       }, 3000);
+                   }
+               }
+           );
+       }
+
+       // Initial Animations
+       document.addEventListener('DOMContentLoaded', () => {
+           const tl = gsap.timeline();
+
+           tl.fromTo('.logo-container', 
+               {
+                   opacity: 0,
+                   scale: 0,
+                   rotation: -720
+               },
+               {
+                   opacity: 1,
+                   scale: 1,
+                   duration: 1.5,
+                   rotation: 0,
+                   ease: "elastic.out(1, 0.3)"
+               }
+           )
+           .to('.title', {
+               opacity: 1,
+               y: 0,
+               duration: 0.7
+           })
+           .to('.main-subtitle', {
+               opacity: 1,
+               y: 0,
+               duration: 0.7,
+               onComplete: () => showFeature(0)
+           });
+       });
+
+       // Countdown Animation
+       function startCountdown() {
+           gsap.to('.countdown', {
+               opacity: 1,
+               duration: 0.5
+           });
+
+           const countdown = document.querySelector('.countdown');
+           let count = 3;
+           
+           const countdownInterval = setInterval(() => {
+               count--;
+               if (count > 0) {
+                   gsap.fromTo(countdown, 
+                       { 
+                           scale: 2, 
+                           opacity: 0 
+                       },
+                       { 
+                           scale: 1, 
+                           opacity: 1, 
+                           duration: 0.5,
+                           ease: "back.out(1.7)",
+                           onStart: () => countdown.textContent = count
+                       }
+                   );
+               } else {
+                   clearInterval(countdownInterval);
+                   gsap.to('.content', {
+                       opacity: 0,
+                       duration: 0.5,
+                       onComplete: () => {
+                           window.location.href = 'form.html';
+                       }
+                   });
+               }
+           }, 1000);
+       }
+   </script>
+</body>
+</html>
