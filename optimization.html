@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tracer - אופטימיזציית מסלולים</title>
+    
+    <!-- Core Libraries -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #2DD4BF;
+            --dark: #1F2937;
+            --vh: 100%;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        body {
+            background: var(--dark);
+            height: 100vh;
+            height: calc(var(--vh, 1vh) * 100);
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            color: white;
+        }
+
+        .container {
+            position: fixed;
+            inset: 0;
+            padding: 1rem;
+        }
+
+        .logo {
+            width: 120px;
+            margin: 0.5rem auto;
+            opacity: 0;
+        }
+
+        .orders-container {
+            margin-top: 1rem;
+            opacity: 0;
+        }
+
+        .order-item {
+            background: rgba(17, 24, 39, 0.8);
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            border-radius: 12px;
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .order-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            margin-left: 1rem;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .order-checkbox.checked::after {
+            content: '✓';
+            position: absolute;
+            color: var(--primary);
+            font-size: 16px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .order-details {
+            flex: 1;
+        }
+
+        .order-time {
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .drivers-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(17, 24, 39, 0.95);
+            padding: 1rem;
+            transform: translateY(100%);
+            opacity: 0;
+        }
+
+        .driver-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem;
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+        }
+
+        .driver-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            margin-left: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .whatsapp-container {
+            position: fixed;
+            inset: 0;
+            background: #128C7E;
+            padding: 1rem;
+            display: none;
+            opacity: 0;
+        }
+
+        .whatsapp-header {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .whatsapp-message {
+            background: #DCF8C6;
+            color: black;
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1rem;
+            line-height: 1.5;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .whatsapp-link {
+            color: #075E54;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .whatsapp-link i {
+            margin-left: 0.5rem;
+        }
+
+        .send-button {
+            position: fixed;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            background: var(--primary);
+            color: var(--dark);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="container">
+        <img src="https://tracer.co.il/wp-content/uploads/elementor/thumbs/Logo-H-p8d906f0bmrgobnn9uwquzibery89mtbvr1plpc910.png" 
+             alt="Tracer Logo" 
+             class="logo">
+
+        <div class="orders-container">
+            <!-- Orders will be added here dynamically -->
+        </div>
+
+        <div class="drivers-container">
+            <div class="driver-item">
+                <div class="driver-avatar">ד</div>
+                <div class="driver-details">
+                    <div class="driver-name">דני</div>
+                    <div class="driver-status">זמין</div>
+                </div>
+            </div>
+            <div class="driver-item">
+                <div class="driver-avatar">ר</div>
+                <div class="driver-details">
+                    <div class="driver-name">רונן</div>
+                    <div class="driver-status">זמין</div>
+                </div>
+            </div>
+            <div class="driver-item">
+                <div class="driver-avatar">מ</div>
+                <div class="driver-details">
+                    <div class="driver-name">משה</div>
+                    <div class="driver-status">זמין</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="send-button">
+            <i class="fab fa-whatsapp"></i>
+            שלח לנהג בוואטסאפ
+        </button>
+    </div>
+
+    <!-- WhatsApp Screen -->
+    <div class="whatsapp-container">
+        <div class="whatsapp-header">
+            <i class="fab fa-whatsapp text-2xl"></i>
+            <div class="driver-details mr-3">
+                <div class="font-semibold">דני</div>
+                <div class="text-sm opacity-80">נהג</div>
+            </div>
+        </div>
+
+        <div class="whatsapp-message">
+            <!-- WhatsApp message template will be added here -->
+        </div>
+    </div>
+    <script>
+        // תיקון גובה למובייל
+        function setMobileHeight() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        setMobileHeight();
+        window.addEventListener('resize', setMobileHeight);
+        window.addEventListener('orientationchange', setMobileHeight);
+    
+        // נתוני הזמנות
+        const orders = [
+            {
+                name: 'רונית שמש',
+                phone: '050-1234567',
+                address: 'הברזל 30, תל אביב',
+                time: '09:00',
+                task: 'משלוח קל',
+                vehicle: 'רכב פרטי'
+            },
+            {
+                name: 'דני לוי',
+                phone: '052-7654321',
+                address: 'דיזנגוף 99, תל אביב',
+                time: '09:30',
+                task: 'משלוח בינוני',
+                vehicle: 'רכב פרטי'
+            },
+            {
+                name: 'מיכל כהן',
+                phone: '054-9876543',
+                address: 'ביאליק 15, רמת גן',
+                time: '10:15',
+                task: 'משלוח כבד',
+                vehicle: 'רכב פרטי'
+            },
+            {
+                name: 'אבי ישראלי',
+                phone: '053-1472583',
+                address: 'סוקולוב 55, הרצליה',
+                time: '11:00',
+                task: 'איסוף דחוף',
+                vehicle: 'רכב פרטי'
+            },
+            {
+                name: 'שירה דוד',
+                phone: '058-3697412',
+                address: 'רוטשילד 123, ראשון לציון',
+                time: '11:45',
+                task: 'משלוח קל',
+                vehicle: 'רכב פרטי'
+            }
+        ];
+    
+        // יצירת פריט הזמנה
+        function createOrderItem(order, index) {
+            const div = document.createElement('div');
+            div.className = 'order-item';
+            div.innerHTML = `
+                <div class="order-checkbox"></div>
+                <div class="order-details">
+                    <div class="order-time">${order.time}</div>
+                    <div class="order-name">${order.name}</div>
+                    <div class="order-address">${order.address}</div>
+                    <div class="order-task">${order.task}</div>
+                </div>
+            `;
+            return div;
+        }
+    
+        // יצירת הודעת ווטסאפ
+        function createWhatsAppMessage(orders) {
+            return orders.map(order => `
+                👤 לקוח: ${order.name}
+                🏠 כתובת: ${order.address}
+                ⏰ שעה: ${order.time}
+                📦 משימה: ${order.task}
+                🚗 רכב: ${order.vehicle}
+                🔗 <a href="https://waze.com/ul?ll=32.1111,34.1111&navigate=yes" class="whatsapp-link">
+                    <i class="fab fa-waze"></i>פתח מסלול בווייז
+                </a>
+                📞 <a href="tel:${order.phone}" class="whatsapp-link">
+                    <i class="fas fa-phone"></i>התקשר ללקוח
+                </a>
+                
+            `).join('\n\n');
+        }
+    
+        // אנימציית סימון הזמנה
+        function toggleOrderSelection(checkbox) {
+            checkbox.classList.toggle('checked');
+            updateSendButton();
+        }
+    
+        // עדכון כפתור שליחה
+        function updateSendButton() {
+            const checkedOrders = document.querySelectorAll('.order-checkbox.checked');
+            const sendButton = document.querySelector('.send-button');
+            
+            if (checkedOrders.length > 0) {
+                gsap.to(sendButton, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.3,
+                    display: 'block'
+                });
+            } else {
+                gsap.to(sendButton, {
+                    opacity: 0,
+                    y: 20,
+                    duration: 0.3,
+                    display: 'none'
+                });
+            }
+        }
+    
+        // הצגת מסך ווטסאפ
+        function showWhatsAppScreen() {
+            const whatsappContainer = document.querySelector('.whatsapp-container');
+            const selectedOrders = [...document.querySelectorAll('.order-checkbox.checked')].map(
+                checkbox => orders[Array.from(checkbox.parentElement.parentElement.children).indexOf(checkbox.parentElement)]
+            );
+    
+            const messageElement = document.querySelector('.whatsapp-message');
+            messageElement.innerHTML = createWhatsAppMessage(selectedOrders);
+    
+            gsap.to('.container', {
+                opacity: 0,
+                duration: 0.3,
+                onComplete: () => {
+                    whatsappContainer.style.display = 'block';
+                    gsap.to(whatsappContainer, {
+                        opacity: 1,
+                        duration: 0.3
+                    });
+                    gsap.to('.whatsapp-message', {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.5,
+                        delay: 0.2
+                    });
+                }
+            });
+        }
+    
+        // אתחול
+        document.addEventListener('DOMContentLoaded', () => {
+            // הצג לוגו
+            gsap.to('.logo', {
+                opacity: 1,
+                duration: 0.5
+            });
+    
+            // הצג הזמנות
+            const ordersContainer = document.querySelector('.orders-container');
+            orders.forEach((order, index) => {
+                const orderElement = createOrderItem(order, index);
+                ordersContainer.appendChild(orderElement);
+                
+                gsap.to(orderElement, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.3,
+                    delay: index * 0.1
+                });
+    
+                orderElement.querySelector('.order-checkbox').addEventListener('click', 
+                    (e) => toggleOrderSelection(e.target));
+            });
+    
+            // הצג כפתור שליחה
+            document.querySelector('.send-button').addEventListener('click', showWhatsAppScreen);
+        });
+    </script>
