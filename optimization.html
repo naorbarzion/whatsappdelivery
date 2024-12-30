@@ -15,6 +15,8 @@
         :root {
             --primary: #2DD4BF;
             --dark: #1F2937;
+            --whatsapp: #128C7E;
+            --whatsapp-light: #DCF8C6;
             --vh: 100%;
         }
 
@@ -30,8 +32,6 @@
             height: 100vh;
             height: calc(var(--vh, 1vh) * 100);
             overflow: hidden;
-            position: fixed;
-            width: 100%;
             color: white;
         }
 
@@ -39,17 +39,21 @@
             position: fixed;
             inset: 0;
             padding: 1rem;
+            display: flex;
+            flex-direction: column;
         }
 
         .logo {
             width: 120px;
-            margin: 0.5rem auto;
-            opacity: 0;
+            margin: 0 auto 1rem;
+            filter: drop-shadow(0 0 10px rgba(45, 212, 191, 0.3));
         }
 
-        .orders-container {
-            margin-top: 1rem;
-            opacity: 0;
+        .orders-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            padding: 0 0.5rem;
         }
 
         .order-item {
@@ -57,51 +61,40 @@
             border: 1px solid rgba(45, 212, 191, 0.3);
             border-radius: 12px;
             padding: 0.8rem;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
             opacity: 0;
             transform: translateY(10px);
-        }
-
-        .order-checkbox {
-            width: 24px;
-            height: 24px;
-            border: 2px solid var(--primary);
-            border-radius: 6px;
-            margin-left: 1rem;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .order-checkbox.checked::after {
-            content: '✓';
-            position: absolute;
-            color: var(--primary);
-            font-size: 16px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .order-details {
-            flex: 1;
         }
 
         .order-time {
             color: var(--primary);
             font-weight: 500;
             font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .order-name {
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+        }
+
+        .order-address {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .order-task {
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-top: 0.3rem;
+        }
+
+        .order-item.selected {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(45, 212, 191, 0.2);
         }
 
         .drivers-container {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(17, 24, 39, 0.95);
-            padding: 1rem;
-            transform: translateY(100%);
+            margin-top: 1rem;
             opacity: 0;
         }
 
@@ -112,6 +105,12 @@
             border: 1px solid rgba(45, 212, 191, 0.3);
             border-radius: 12px;
             margin-bottom: 0.5rem;
+            background: rgba(17, 24, 39, 0.8);
+        }
+
+        .driver-item.selected {
+            border-color: var(--primary);
+            background: rgba(45, 212, 191, 0.1);
         }
 
         .driver-avatar {
@@ -124,62 +123,83 @@
             align-items: center;
             justify-content: center;
             font-weight: 600;
+            color: var(--dark);
         }
 
-        .whatsapp-container {
+        /* WhatsApp Screen Styles */
+        .whatsapp-screen {
             position: fixed;
             inset: 0;
-            background: #128C7E;
-            padding: 1rem;
             display: none;
             opacity: 0;
+            background: #fff;
+            color: black;
         }
 
         .whatsapp-header {
+            background: var(--whatsapp);
+            color: white;
+            padding: 1rem;
             display: flex;
             align-items: center;
+            gap: 1rem;
+        }
+
+        .whatsapp-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--whatsapp);
+            font-weight: 600;
+        }
+
+        .whatsapp-chat {
+            background: #E5DDD5;
+            height: calc(100% - 60px);
             padding: 1rem;
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 12px;
-            margin-bottom: 1rem;
+            overflow-y: auto;
         }
 
         .whatsapp-message {
-            background: #DCF8C6;
-            color: black;
+            background: var(--whatsapp-light);
             padding: 1rem;
             border-radius: 12px;
-            margin: 1rem;
-            line-height: 1.5;
-            opacity: 0;
+            margin-bottom: 1rem;
+            max-width: 90%;
+            position: relative;
             transform: translateY(20px);
+            opacity: 0;
+            line-height: 1.6;
+        }
+
+        .whatsapp-message::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -8px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid var(--whatsapp-light);
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
         }
 
         .whatsapp-link {
-            color: #075E54;
-            text-decoration: none;
             display: flex;
             align-items: center;
+            color: var(--whatsapp);
+            text-decoration: none;
             margin-top: 0.5rem;
+            font-weight: 500;
         }
 
         .whatsapp-link i {
             margin-left: 0.5rem;
-        }
-
-        .send-button {
-            position: fixed;
-            bottom: 1rem;
-            left: 1rem;
-            right: 1rem;
-            background: var(--primary);
-            color: var(--dark);
-            padding: 1rem;
-            border-radius: 12px;
-            text-align: center;
-            font-weight: 600;
-            opacity: 0;
-            transform: translateY(20px);
+            width: 20px;
         }
     </style>
 </head>
@@ -190,64 +210,52 @@
              alt="Tracer Logo" 
              class="logo">
 
-        <div class="orders-container">
+        <!-- Orders Grid -->
+        <div class="orders-grid">
             <!-- Orders will be added here dynamically -->
         </div>
 
+        <!-- Drivers List -->
         <div class="drivers-container">
-            <div class="driver-item">
+            <div class="driver-item" data-driver="דני">
                 <div class="driver-avatar">ד</div>
-                <div class="driver-details">
-                    <div class="driver-name">דני</div>
-                    <div class="driver-status">זמין</div>
+                <div>
+                    <div class="font-medium">דני</div>
+                    <div class="text-sm opacity-80">זמין</div>
                 </div>
             </div>
-            <div class="driver-item">
+            <div class="driver-item" data-driver="רונן">
                 <div class="driver-avatar">ר</div>
-                <div class="driver-details">
-                    <div class="driver-name">רונן</div>
-                    <div class="driver-status">זמין</div>
+                <div>
+                    <div class="font-medium">רונן</div>
+                    <div class="text-sm opacity-80">זמין</div>
                 </div>
             </div>
-            <div class="driver-item">
+            <div class="driver-item" data-driver="משה">
                 <div class="driver-avatar">מ</div>
-                <div class="driver-details">
-                    <div class="driver-name">משה</div>
-                    <div class="driver-status">זמין</div>
+                <div>
+                    <div class="font-medium">משה</div>
+                    <div class="text-sm opacity-80">זמין</div>
                 </div>
             </div>
         </div>
-
-        <button class="send-button">
-            <i class="fab fa-whatsapp"></i>
-            שלח לנהג בוואטסאפ
-        </button>
     </div>
 
     <!-- WhatsApp Screen -->
-    <div class="whatsapp-container">
+    <div class="whatsapp-screen">
         <div class="whatsapp-header">
-            <i class="fab fa-whatsapp text-2xl"></i>
-            <div class="driver-details mr-3">
-                <div class="font-semibold">דני</div>
+            <div class="whatsapp-avatar">ד</div>
+            <div>
+                <div class="font-medium driver-name">דני</div>
                 <div class="text-sm opacity-80">נהג</div>
             </div>
         </div>
-
-        <div class="whatsapp-message">
-            <!-- WhatsApp message template will be added here -->
+        <div class="whatsapp-chat">
+            <!-- Messages will be added here dynamically -->
         </div>
     </div>
+
     <script>
-        // תיקון גובה למובייל
-        function setMobileHeight() {
-            let vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
-        }
-        setMobileHeight();
-        window.addEventListener('resize', setMobileHeight);
-        window.addEventListener('orientationchange', setMobileHeight);
-    
         // נתוני הזמנות
         const orders = [
             {
@@ -255,22 +263,22 @@
                 phone: '050-1234567',
                 address: 'הברזל 30, תל אביב',
                 time: '09:00',
-                task: 'משלוח קל',
+                task: 'משלוח בינוני',
                 vehicle: 'רכב פרטי'
             },
             {
                 name: 'דני לוי',
                 phone: '052-7654321',
                 address: 'דיזנגוף 99, תל אביב',
-                time: '09:30',
-                task: 'משלוח בינוני',
+                time: '10:30',
+                task: 'משלוח קל',
                 vehicle: 'רכב פרטי'
             },
             {
                 name: 'מיכל כהן',
                 phone: '054-9876543',
                 address: 'ביאליק 15, רמת גן',
-                time: '10:15',
+                time: '11:00',
                 task: 'משלוח כבד',
                 vehicle: 'רכב פרטי'
             },
@@ -278,137 +286,125 @@
                 name: 'אבי ישראלי',
                 phone: '053-1472583',
                 address: 'סוקולוב 55, הרצליה',
-                time: '11:00',
+                time: '12:30',
                 task: 'איסוף דחוף',
-                vehicle: 'רכב פרטי'
-            },
-            {
-                name: 'שירה דוד',
-                phone: '058-3697412',
-                address: 'רוטשילד 123, ראשון לציון',
-                time: '11:45',
-                task: 'משלוח קל',
                 vehicle: 'רכב פרטי'
             }
         ];
-    
+
         // יצירת פריט הזמנה
-        function createOrderItem(order, index) {
+        function createOrderElement(order) {
             const div = document.createElement('div');
             div.className = 'order-item';
             div.innerHTML = `
-                <div class="order-checkbox"></div>
-                <div class="order-details">
-                    <div class="order-time">${order.time}</div>
-                    <div class="order-name">${order.name}</div>
-                    <div class="order-address">${order.address}</div>
-                    <div class="order-task">${order.task}</div>
-                </div>
+                <div class="order-time">${order.time}</div>
+                <div class="order-name">${order.name}</div>
+                <div class="order-address">${order.address}</div>
+                <div class="order-task">${order.task}</div>
             `;
             return div;
         }
-    
+
         // יצירת הודעת ווטסאפ
-        function createWhatsAppMessage(orders) {
-            return orders.map(order => `
-                👤 לקוח: ${order.name}
-                🏠 כתובת: ${order.address}
-                ⏰ שעה: ${order.time}
-                📦 משימה: ${order.task}
-                🚗 רכב: ${order.vehicle}
-                🔗 <a href="https://waze.com/ul?ll=32.1111,34.1111&navigate=yes" class="whatsapp-link">
-                    <i class="fab fa-waze"></i>פתח מסלול בווייז
-                </a>
-                📞 <a href="tel:${order.phone}" class="whatsapp-link">
-                    <i class="fas fa-phone"></i>התקשר ללקוח
-                </a>
-                
-            `).join('\n\n');
+        function createWhatsAppMessage(order) {
+            return `👤 לקוח: ${order.name}
+🏠 כתובת: ${order.address}
+⏰ שעה: ${order.time}
+📦 משימה: ${order.task}
+🚗 רכב: ${order.vehicle}
+
+🔗 <a href="https://waze.com/ul?ll=32.1111,34.1111&navigate=yes" class="whatsapp-link">
+    <i class="fab fa-waze"></i>פתח מסלול בווייז
+</a>
+📞 <a href="tel:${order.phone}" class="whatsapp-link">
+    <i class="fas fa-phone"></i>התקשר ללקוח
+</a>`;
         }
-    
-        // אנימציית סימון הזמנה
-        function toggleOrderSelection(checkbox) {
-            checkbox.classList.toggle('checked');
-            updateSendButton();
-        }
-    
-        // עדכון כפתור שליחה
-        function updateSendButton() {
-            const checkedOrders = document.querySelectorAll('.order-checkbox.checked');
-            const sendButton = document.querySelector('.send-button');
+
+        // תהליך אוטומטי
+        async function startAutomation() {
+            // הצגת הזמנות
+            const ordersGrid = document.querySelector('.orders-grid');
             
-            if (checkedOrders.length > 0) {
-                gsap.to(sendButton, {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.3,
-                    display: 'block'
-                });
-            } else {
-                gsap.to(sendButton, {
-                    opacity: 0,
-                    y: 20,
-                    duration: 0.3,
-                    display: 'none'
+            for (let i = 0; i < orders.length; i++) {
+                const orderElement = createOrderElement(orders[i]);
+                ordersGrid.appendChild(orderElement);
+                
+                await new Promise(resolve => {
+                    gsap.fromTo(orderElement, 
+                        { opacity: 0, y: 20 },
+                        { 
+                            opacity: 1, 
+                            y: 0, 
+                            duration: 0.3,
+                            delay: i * 0.2,
+                            onComplete: resolve
+                        }
+                    );
                 });
             }
-        }
-    
-        // הצגת מסך ווטסאפ
-        function showWhatsAppScreen() {
-            const whatsappContainer = document.querySelector('.whatsapp-container');
-            const selectedOrders = [...document.querySelectorAll('.order-checkbox.checked')].map(
-                checkbox => orders[Array.from(checkbox.parentElement.parentElement.children).indexOf(checkbox.parentElement)]
-            );
-    
-            const messageElement = document.querySelector('.whatsapp-message');
-            messageElement.innerHTML = createWhatsAppMessage(selectedOrders);
-    
+
+            // סימון הזמנות
+            const orderElements = document.querySelectorAll('.order-item');
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            for (let orderElement of orderElements) {
+                orderElement.classList.add('selected');
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+
+            // הצגת רשימת נהגים
+            const driversContainer = document.querySelector('.drivers-container');
+            gsap.to(driversContainer, {
+                opacity: 1,
+                duration: 0.5
+            });
+
+            // בחירת נהג רנדומלי
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            const drivers = document.querySelectorAll('.driver-item');
+            const randomDriver = drivers[Math.floor(Math.random() * drivers.length)];
+            randomDriver.classList.add('selected');
+
+            // מעבר למסך ווטסאפ
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            const whatsappScreen = document.querySelector('.whatsapp-screen');
+            const chat = document.querySelector('.whatsapp-chat');
+            
             gsap.to('.container', {
                 opacity: 0,
                 duration: 0.3,
                 onComplete: () => {
-                    whatsappContainer.style.display = 'block';
-                    gsap.to(whatsappContainer, {
-                        opacity: 1,
-                        duration: 0.3
-                    });
-                    gsap.to('.whatsapp-message', {
-                        opacity: 1,
-                        y: 0,
-                        duration: 0.5,
-                        delay: 0.2
+                    document.querySelector('.container').style.display = 'none';
+                    whatsappScreen.style.display = 'block';
+                    gsap.to(whatsappScreen, { opacity: 1, duration: 0.3 });
+
+                    // עדכון שם הנהג
+                    document.querySelector('.whatsapp-avatar').textContent = 
+                        randomDriver.getAttribute('data-driver').charAt(0);
+                    document.querySelector('.driver-name').textContent = 
+                        randomDriver.getAttribute('data-driver');
+
+                    // הוספת הודעות
+                    orders.forEach((order, index) => {
+                        const messageDiv = document.createElement('div');
+                        messageDiv.className = 'whatsapp-message';
+                        messageDiv.innerHTML = createWhatsAppMessage(order);
+                        chat.appendChild(messageDiv);
+
+                        gsap.to(messageDiv, {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.3,
+                            delay: index * 0.5
+                        });
                     });
                 }
             });
         }
-    
-        // אתחול
-        document.addEventListener('DOMContentLoaded', () => {
-            // הצג לוגו
-            gsap.to('.logo', {
-                opacity: 1,
-                duration: 0.5
-            });
-    
-            // הצג הזמנות
-            const ordersContainer = document.querySelector('.orders-container');
-            orders.forEach((order, index) => {
-                const orderElement = createOrderItem(order, index);
-                ordersContainer.appendChild(orderElement);
-                
-                gsap.to(orderElement, {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.3,
-                    delay: index * 0.1
-                });
-    
-                orderElement.querySelector('.order-checkbox').addEventListener('click', 
-                    (e) => toggleOrderSelection(e.target));
-            });
-    
-            // הצג כפתור שליחה
-            document.querySelector('.send-button').addEventListener('click', showWhatsAppScreen);
-        });
+
+        // התחלת התהליך כשהדף נטען
+        document.addEventListener('DOMContentLoaded', startAutomation);
     </script>
+</body>
+</html>
